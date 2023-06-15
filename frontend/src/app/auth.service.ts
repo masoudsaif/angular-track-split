@@ -17,15 +17,16 @@ export class AuthService {
   private http = inject(HttpClient);
 
   signIn(data: ISignIn) {
+    console.log(data);
     return this.http.post<IResponse<string>>(
-      environment.SERVER_URL + 'signin',
+      `${environment.SERVER_URL}users/signin'`,
       data
     );
   }
 
   signUp(data: ISignUp) {
     return this.http.post<IResponse<ISignUp>>(
-      environment.SERVER_URL + 'signin',
+      `${environment.SERVER_URL}users/signup`,
       data
     );
   }

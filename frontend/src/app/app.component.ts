@@ -11,12 +11,18 @@ import { AuthService } from './auth.service';
       <span class="one">Groups</span>
       <span></span>
       <div *ngIf="!authService.user(); else auth">
-        <button mat-button class="m-2">Sign in</button>
-        <button mat-raised-button>Sign up</button>
+        <button mat-button class="m-2" [routerLink]="['', 'sign-in']">
+          Sign in
+        </button>
+        <button mat-raised-button [routerLink]="['', 'sign-up']">
+          Sign up
+        </button>
       </div>
     </mat-toolbar>
     <ng-template #auth>
-      <button mat-button class="m-2">Sign out</button>
+      <button mat-button class="m-2" (click)="authService.signOut()">
+        Sign out
+      </button>
     </ng-template>
     <router-outlet></router-outlet>
   `,
