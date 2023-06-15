@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -21,8 +23,10 @@ import { SignUpComponent } from './sign-up.component';
 
 const bootstrap = (authService: AuthService) => {
   return () => {
-    const token = localStorage.getItem(TOKEN_KEY);
-    const user = localStorage.getItem(USER_KEY);
+    const token =
+      localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+    const user =
+      localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
     if (token) {
       authService.token.set(token);
       authService.user.set(JSON.parse(user!));
@@ -44,6 +48,7 @@ const bootstrap = (authService: AuthService) => {
     MatInputModule,
     MatCardModule,
     MatCheckboxModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     provideHttpClient(withInterceptors([addTokenInterceptor])),

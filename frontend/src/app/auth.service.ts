@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment.development';
 
 import IResponse from './types/response.inteface';
 import ISignIn from './types/sign-in.interface';
+import ISignUpResponse from './types/sign-up-response.interface';
 import ISignUp from './types/sign-up.interface';
 import IUser from './types/user.interface';
 
@@ -19,13 +20,13 @@ export class AuthService {
   signIn(data: ISignIn) {
     console.log(data);
     return this.http.post<IResponse<string>>(
-      `${environment.SERVER_URL}users/signin'`,
+      `${environment.SERVER_URL}users/signin`,
       data
     );
   }
 
   signUp(data: ISignUp) {
-    return this.http.post<IResponse<ISignUp>>(
+    return this.http.post<IResponse<ISignUpResponse>>(
       `${environment.SERVER_URL}users/signup`,
       data
     );

@@ -1,12 +1,13 @@
-import { Component, OnChanges, OnDestroy, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from './auth.service';
-import { Subscription, catchError, throwError } from 'rxjs';
-import ISignIn from './types/sign-in.interface';
-import jwtDecode from 'jwt-decode';
-import IUser from './types/user.interface';
 import { Router } from '@angular/router';
+import jwtDecode from 'jwt-decode';
+import { catchError, Subscription, throwError } from 'rxjs';
+
+import { AuthService } from './auth.service';
 import { TOKEN_KEY, USER_KEY } from './constants/keys';
+import ISignIn from './types/sign-in.interface';
+import IUser from './types/user.interface';
 
 @Component({
   selector: 'app-sign-in',
@@ -52,20 +53,25 @@ import { TOKEN_KEY, USER_KEY } from './constants/keys';
             <mat-checkbox color="primary" formControlName="isRemember"
               >Remember me</mat-checkbox
             >
-            <mat-error *ngIf="error">
-              {{ error }}
-            </mat-error>
+            <div class="flex justify-center">
+              <mat-error *ngIf="error">
+                {{ error }}
+              </mat-error>
+            </div>
           </form>
         </mat-card-content>
         <mat-card-actions class="flex justify-end">
           <button
-            [disabled]="form.invalid"
+            [disabled]="form.invalid || isLoading"
             mat-raised-button
             color="primary"
             type="submit"
             (click)="handleSubmit()"
           >
             Sign in
+            <mat-icon *ngIf="isLoading">
+              <mat-spinner color="accent" diameter="18" />
+            </mat-icon>
           </button>
         </mat-card-actions>
       </mat-card>
@@ -102,8 +108,7 @@ export class SignInComponent implements OnDestroy {
       .signIn(values as ISignIn)
       .pipe(
         catchError((e) => {
-          this.error = 'Invalid credentials!';
-          console.log(e);
+          this.error = e.error.data;
           this.isLoading = false;
           return throwError(
             () => new Error('Something bad happened; please try again later.')
@@ -111,18 +116,14 @@ export class SignInComponent implements OnDestroy {
         })
       )
       .subscribe((res) => {
-        if (res.success) {
-          const user = jwtDecode(res.data) as IUser;
-          this.authService.token.set(res.data);
-          this.authService.user.set(user);
-          this.isLoading = false;
-          if (isRemember) {
-            localStorage.setItem(TOKEN_KEY, res.data);
-            localStorage.setItem(USER_KEY, JSON.stringify(user));
-          }
-          this.router.navigate(['']);
-        }
-        console.log(res);
+        const user = jwtDecode(res.data) as IUser;
+        const storage = isRemember ? localStorage : sessionStorage;
+        this.authService.token.set(res.data);
+        this.authService.user.set(user);
+        this.isLoading = false;
+        storage.setItem(TOKEN_KEY, res.data);
+        storage.setItem(USER_KEY, JSON.stringify(user));
+        this.router.navigate(['']);
       });
   }
 
