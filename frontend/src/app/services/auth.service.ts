@@ -3,11 +3,11 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.development';
 
-import IResponse from './types/response.inteface';
-import ISignIn from './types/sign-in.interface';
-import ISignUpResponse from './types/sign-up-response.interface';
-import ISignUp from './types/sign-up.interface';
-import IUser from './types/user.interface';
+import IResponse from '../types/response.inteface';
+import ISignIn from '../types/sign-in.interface';
+import ISignUpResponse from '../types/sign-up-response.interface';
+import ISignUp from '../types/sign-up.interface';
+import IUser from '../types/user.interface';
 
 @Injectable({
   providedIn: 'root',

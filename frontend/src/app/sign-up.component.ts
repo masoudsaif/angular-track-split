@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { catchError, Subscription, throwError } from 'rxjs';
 
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { TOKEN_KEY, USER_KEY } from './constants/keys';
 import ISignUp from './types/sign-up.interface';
 

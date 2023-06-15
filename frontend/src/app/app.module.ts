@@ -18,7 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { addTokenInterceptor } from './add-token.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { TOKEN_KEY, USER_KEY } from './constants/keys';
 import { NotificationComponent } from './notification.component';
 import { SignInComponent } from './sign-in.component';

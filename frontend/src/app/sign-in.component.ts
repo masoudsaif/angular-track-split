@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import jwtDecode from 'jwt-decode';
 import { catchError, Subscription, throwError } from 'rxjs';
 
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { TOKEN_KEY, USER_KEY } from './constants/keys';
 import ISignIn from './types/sign-in.interface';
 import IUser from './types/user.interface';

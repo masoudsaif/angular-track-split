@@ -14,6 +14,10 @@ body {
   display: flex;
 }
 
+.wrap {
+  flex-wrap: wrap;
+}
+
 .column {
   flex-direction: column;
 }
@@ -30,12 +34,27 @@ body {
   justify-content: flex-end;
 }
 
-.gap {
+.justify-between {
+  justify-content: space-between;
+}
+.one {
+  flex: 1;
+}
+
+.gap-1 {
   gap: 8px;
 }
 
-.one {
-  flex: 1;
+.gap-2 {
+  gap: 12px;
+}
+
+.gap-3 {
+  gap: 16px;
+}
+
+.gap-4 {
+  gap: 20px;
 }
 
 .m-1 {
@@ -109,5 +128,5 @@ body {
 }
 
 .screen-margin {
-  margin: 28px 8px 28px 8px;
+  margin: 28px 20px 28px 20px;
 }
