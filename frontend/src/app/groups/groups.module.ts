@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { GroupRoutingModule } from './groups-routing.module';
 import { GroupsComponent } from './groups.component';
+import { GroupCardComponent } from './group-card.component';
 
 @NgModule({
   declarations: [
-    GroupsComponent
+    GroupsComponent,
+    GroupCardComponent
   ],
   imports: [CommonModule, GroupRoutingModule],
 })

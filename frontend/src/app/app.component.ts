@@ -26,11 +26,11 @@ import { AuthService } from './auth.service';
         Sign out
       </button>
       <mat-menu #menu>
-        <app-notification email="email@miu.edu" />
+        <app-notification title="Florida" />
         <mat-divider />
-        <app-notification email="email@miu.edu" />
+        <app-notification title="Texas" />
         <mat-divider />
-        <app-notification email="email@miu.edu" />
+        <app-notification title="Texas" />
       </mat-menu>
     </ng-template>
     <router-outlet></router-outlet>

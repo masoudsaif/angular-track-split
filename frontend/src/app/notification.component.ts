@@ -3,16 +3,19 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-notification',
   template: `
-    <div class="p-3">
-      <span>{{ email }}</span>
-      <div class="mt-1 flex gap" (click)="$event.stopPropagation()">
-        <button mat-raised-button color="primary">Accept</button>
-        <button mat-raised-button color="warn">Decline</button>
-      </div>
+    <div class="p-3 flex column" (click)="$event.stopPropagation()">
+      <span>{{ title }}</span>
+      <button mat-raised-button class="mt-1" color="primary">Accept</button>
     </div>
   `,
-  styles: [],
+  styles: [
+    `
+      div {
+        min-width: 140px;
+      }
+    `,
+  ],
 })
 export class NotificationComponent {
-  @Input({ required: true }) email!: string;
+  @Input({ required: true }) title!: string;
 }
