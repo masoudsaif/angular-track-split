@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.development';
 
 import IResponse from './types/response.inteface';
@@ -12,10 +13,10 @@ import IUser from './types/user.interface';
   providedIn: 'root',
 })
 export class AuthService {
+  private http = inject(HttpClient);
+  private router = inject(Router);
   token = signal('');
   user = signal<IUser | null>(null);
-
-  private http = inject(HttpClient);
 
   signIn(data: ISignIn) {
     console.log(data);
@@ -34,7 +35,9 @@ export class AuthService {
 
   signOut() {
     localStorage.clear();
+    sessionStorage.clear();
     this.token.set('');
     this.user.set(null);
+    this.router.navigate(['sign-in']);
   }
 }

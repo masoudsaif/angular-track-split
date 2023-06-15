@@ -30,6 +30,10 @@ body {
   justify-content: flex-end;
 }
 
+.gap {
+  gap: 8px;
+}
+
 .one {
   flex: 1;
 }
@@ -64,6 +68,22 @@ body {
 
 .mb-4 {
   margin-bottom: 20px;
+}
+
+.mt-1 {
+  margin-top: 8px;
+}
+
+.mt-2 {
+  margin-top: 12px;
+}
+
+.mt-3 {
+  margin-top: 16px;
+}
+
+.mt-4 {
+  margin-top: 20px;
 }
 
 .p-1 {
