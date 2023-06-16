@@ -4,76 +4,77 @@ import { Router } from '@angular/router';
 import jwtDecode from 'jwt-decode';
 import { catchError, Subscription, throwError } from 'rxjs';
 
-import { AuthService } from './services/auth.service';
 import { TOKEN_KEY, USER_KEY } from './constants/keys';
+import { GroupsService } from './groups/services/groups.service';
+import { AuthService } from './services/auth.service';
 import ISignIn from './types/sign-in.interface';
 import IUser from './types/user.interface';
 
 @Component({
   selector: 'app-sign-in',
   template: `
-    <div class="flex justify-center screen-margin">
-      <mat-card class="form-container">
-        <mat-card-content>
-          <form
-            class="flex column"
-            [formGroup]="form"
-            (ngSubmit)="handleSubmit()"
-          >
-            <mat-form-field class="mb-1">
-              <mat-label>Email</mat-label>
-              <input
-                matInput
-                type="email"
-                formControlName="email"
-                placeholder="Ex. pat@example.com"
-              />
-              <mat-error
-                *ngIf="email.errors?.['email'] && !email.errors?.['required']"
-              >
-                Please enter a valid <strong>email address</strong>
-              </mat-error>
-              <mat-error *ngIf="email.errors?.['required']">
-                Email is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Password</mat-label>
-              <input matInput type="password" formControlName="password" />
-              <mat-error
-                *ngIf="password.errors?.['minlength'] && !password.errors?.['required']"
-              >
-                The minimum length for the password is <strong>6</strong>
-              </mat-error>
-              <mat-error *ngIf="password.errors?.['required']">
-                Password is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-            <mat-checkbox color="primary" formControlName="isRemember"
-              >Remember me</mat-checkbox
+    <div class="relative">
+      <mat-progress-bar mode="indeterminate" class="fixed" *ngIf="isLoading" />
+      <div class="flex justify-center screen-margin">
+        <mat-card class="form-container">
+          <mat-card-content>
+            <form
+              class="flex column"
+              [formGroup]="form"
+              (ngSubmit)="handleSubmit()"
             >
-            <div class="flex justify-center">
-              <mat-error *ngIf="error">
-                {{ error }}
-              </mat-error>
-            </div>
-          </form>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button
-            [disabled]="form.invalid || isLoading"
-            mat-raised-button
-            color="primary"
-            type="submit"
-            (click)="handleSubmit()"
-          >
-            Sign in
-            <mat-icon *ngIf="isLoading">
-              <mat-spinner color="accent" diameter="18" />
-            </mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
+              <mat-form-field class="mb-1">
+                <mat-label>Email</mat-label>
+                <input
+                  matInput
+                  type="email"
+                  formControlName="email"
+                  placeholder="Ex. pat@example.com"
+                />
+                <mat-error
+                  *ngIf="email.errors?.['email'] && !email.errors?.['required']"
+                >
+                  Please enter a valid <strong>email address</strong>
+                </mat-error>
+                <mat-error *ngIf="email.errors?.['required']">
+                  Email is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input matInput type="password" formControlName="password" />
+                <mat-error
+                  *ngIf="password.errors?.['minlength'] && !password.errors?.['required']"
+                >
+                  The minimum length for the password is <strong>6</strong>
+                </mat-error>
+                <mat-error *ngIf="password.errors?.['required']">
+                  Password is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-checkbox color="primary" formControlName="isRemember"
+                >Remember me</mat-checkbox
+              >
+              <div class="flex justify-center">
+                <mat-error *ngIf="error">
+                  {{ error }}
+                </mat-error>
+              </div>
+            </form>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button
+              [disabled]="form.invalid || isLoading"
+              mat-raised-button
+              color="primary"
+              type="submit"
+              (click)="handleSubmit()"
+            >
+              Sign in
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
     </div>
   `,
   styles: [``],
@@ -81,6 +82,7 @@ import IUser from './types/user.interface';
 export class SignInComponent implements OnDestroy {
   private router = inject(Router);
   private authService = inject(AuthService);
+  private groupsService = inject(GroupsService);
   form = inject(FormBuilder).nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -89,6 +91,7 @@ export class SignInComponent implements OnDestroy {
   isLoading = false;
   error = '';
   signIn$: Subscription | null = null;
+  getGroups$: Subscription | null = null;
 
   get email() {
     return this.form.controls.email;
@@ -122,11 +125,19 @@ export class SignInComponent implements OnDestroy {
         this.isLoading = false;
         storage.setItem(TOKEN_KEY, res.data);
         storage.setItem(USER_KEY, JSON.stringify(user));
+        this.getGroups$ = this.groupsService
+          .getGroups(true)
+          .subscribe((res) => {
+            if (res.success) {
+              this.groupsService.requests.set(res.data);
+            }
+          });
         this.router.navigate(['']);
       });
   }
 
   ngOnDestroy() {
     this.signIn$?.unsubscribe();
+    this.getGroups$?.unsubscribe();
   }
 }
