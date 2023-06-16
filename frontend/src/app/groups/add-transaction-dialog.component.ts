@@ -4,27 +4,47 @@ import { Subscription, catchError, throwError } from 'rxjs';
 import { GroupsService } from './services/groups.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import IResponse from '../types/response.inteface';
+import IMember from './types/member.interface';
 
 @Component({
   selector: 'app-add-transaction-dialog',
   template: `
-    <form class="relative" [formGroup]="form" (ngSubmit)="handleSubmit()">
-      <mat-progress-bar mode="indeterminate" class="fixed" *ngIf="isLoading" />
-      <h2 mat-dialog-title>Add Member</h2>
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+      <div class="fixed full-width" *ngIf="isLoading">
+        <mat-progress-bar mode="indeterminate" />
+      </div>
+      <h2 mat-dialog-title>Add Transaction</h2>
       <mat-divider />
       <mat-dialog-content class="mat-typography">
         <mat-form-field class="mb-1">
-          <mat-label>Email</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Email"
-            formControlName="email"
-          />
+          <mat-label>Title</mat-label>
+          <input matInput type="text" formControlName="title" />
         </mat-form-field>
-        <mat-error *ngIf="error">
-          {{ error }}
-        </mat-error>
+        <mat-form-field class="mb-1">
+          <mat-label>Description</mat-label>
+          <input matInput type="text" formControlName="description" />
+        </mat-form-field>
+        <mat-form-field class="mb-1">
+          <mat-label>Category</mat-label>
+          <input matInput type="text" formControlName="category" />
+        </mat-form-field>
+        <mat-form-field class="mb-1">
+          <mat-label>Amount</mat-label>
+          <input matInput type="text" formControlName="amount" />
+        </mat-form-field>
+        <mat-form-field class="mb-1">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div class="mb-1">
+          <label for="receiptName">Receipt</label>
+          <input name="receiptName" type="file" formControlName="receipt" />
+        </div>
       </mat-dialog-content>
       <mat-divider />
       <mat-dialog-actions align="end">
@@ -40,7 +60,14 @@ import IResponse from '../types/response.inteface';
       </mat-dialog-actions>
     </form>
   `,
-  styles: [],
+  styles: [
+    `
+      mat-dialog-content,
+      mat-progress-bar {
+        max-width: 250px;
+      }
+    `,
+  ],
 })
 export class AddTransactionDialogComponent {
   private dialog = inject(MatDialogRef);
@@ -56,7 +83,8 @@ export class AddTransactionDialogComponent {
   });
   addTransaction$: Subscription | null = null;
   isLoading = false;
-  data: { group_Id: string } = inject(MAT_DIALOG_DATA);
+  data: { group_Id: string; group_members: IMember[] } =
+    inject(MAT_DIALOG_DATA);
   error = '';
 
   get title() {

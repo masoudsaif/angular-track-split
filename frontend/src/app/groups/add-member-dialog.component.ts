@@ -9,7 +9,7 @@ import IResponse from '../types/response.inteface';
   selector: 'app-add-member-dialog',
   template: `
     <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-      <div class="fixed full-width">
+      <div class="fixed full-width" *ngIf="isLoading">
         <mat-progress-bar mode="indeterminate" />
       </div>
       <h2 mat-dialog-title>Add Member</h2>

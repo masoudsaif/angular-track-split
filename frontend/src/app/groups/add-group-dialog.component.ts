@@ -9,7 +9,7 @@ import { GroupsService } from './services/groups.service';
   selector: 'app-add-group-dialog',
   template: `
     <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-      <div class="fixed full-width">
+      <div class="fixed full-width" *ngIf="isLoading">
         <mat-progress-bar mode="indeterminate" />
       </div>
       <h2 mat-dialog-title>Add Group</h2>
