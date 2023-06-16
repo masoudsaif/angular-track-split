@@ -32,11 +32,9 @@ import { Router } from '@angular/router';
         Sign out
       </button>
       <mat-menu #menu>
-        <mat-progress-bar
-          mode="indeterminate"
-          class="fixed"
-          *ngIf="isLoading"
-        />
+        <div class="fixed full-width" *ngIf="isLoading">
+          <mat-progress-bar mode="indeterminate" />
+        </div>
         <div *ngIf="groupsService.requests().length !== 0; else emptyRequests">
           <div
             *ngFor="

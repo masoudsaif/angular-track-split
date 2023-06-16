@@ -9,25 +9,25 @@ import { AddGroupDialogComponent } from './add-group-dialog.component';
 @Component({
   selector: 'app-groups',
   template: `
-    <div class="relative">
-      <mat-progress-bar mode="indeterminate" class="fixed" *ngIf="isLoading" />
-      <div class="screen-margin flex column">
-        <div class="flex justify-between align-center mb-2">
-          <h2>Groups</h2>
-          <button mat-fab color="basic" (click)="openDialog()">
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
-        <mat-divider />
-        <div
-          class="gap-4 grid mt-2"
-          *ngIf="groupsService.groups().length; else emptyGroups"
-        >
-          <app-group-card
-            *ngFor="let group of groupsService.groups()"
-            [group]="group"
-          />
-        </div>
+    <div class="fixed full-width" *ngIf="isLoading">
+      <mat-progress-bar mode="indeterminate" />
+    </div>
+    <div class="screen-margin flex column">
+      <div class="flex justify-between align-center mb-2">
+        <h2>Groups</h2>
+        <button mat-fab color="basic" (click)="openDialog()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <mat-divider />
+      <div
+        class="gap-4 grid mt-2"
+        *ngIf="groupsService.groups().length; else emptyGroups"
+      >
+        <app-group-card
+          *ngFor="let group of groupsService.groups()"
+          [group]="group"
+        />
       </div>
     </div>
     <ng-template #emptyGroups>

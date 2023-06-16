@@ -8,8 +8,10 @@ import { GroupsService } from './services/groups.service';
 @Component({
   selector: 'app-add-group-dialog',
   template: `
-    <form class="relative" [formGroup]="form" (ngSubmit)="handleSubmit()">
-      <mat-progress-bar mode="indeterminate" class="fixed" *ngIf="isLoading" />
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+      <div class="fixed full-width">
+        <mat-progress-bar mode="indeterminate" />
+      </div>
       <h2 mat-dialog-title>Add Group</h2>
       <mat-divider />
       <mat-dialog-content class="mat-typography">
@@ -46,7 +48,14 @@ import { GroupsService } from './services/groups.service';
       </mat-dialog-actions>
     </form>
   `,
-  styles: [],
+  styles: [
+    `
+      mat-dialog-content,
+      mat-progress-bar {
+        max-width: 250px;
+      }
+    `,
+  ],
 })
 export class AddGroupDialogComponent implements OnDestroy {
   private dialog = inject(MatDialog);

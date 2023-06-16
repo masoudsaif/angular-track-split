@@ -23,7 +23,7 @@ body {
 }
 
 .fixed {
-  display: fixed;
+  position: fixed;
 }
 
 .flex {

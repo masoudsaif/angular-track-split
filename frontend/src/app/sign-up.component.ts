@@ -11,78 +11,78 @@ import ISignUp from './types/sign-up.interface';
 @Component({
   selector: 'app-sign-up',
   template: `
-    <div class="relative">
-      <mat-progress-bar mode="indeterminate" class="fixed" *ngIf="isLoading" />
-      <div class="flex justify-center screen-margin">
-        <mat-card class="form-container">
-          <mat-card-content>
-            <form
-              class="flex column"
-              [formGroup]="form"
-              (ngSubmit)="handleSubmit()"
-            >
-              <mat-form-field class="mb-1">
-                <mat-label>Full name</mat-label>
-                <input matInput type="text" formControlName="fullname" />
-                <mat-error
-                  *ngIf="fullname.errors?.['minlength'] && !fullname.errors?.['required']"
-                >
-                  Please enter a valid <strong>fullname</strong>
-                </mat-error>
-                <mat-error *ngIf="fullname.errors?.['required']">
-                  Full name is <strong>required</strong>
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field class="mb-1">
-                <mat-label>Email</mat-label>
-                <input
-                  matInput
-                  type="email"
-                  formControlName="email"
-                  placeholder="Ex. pat@example.com"
-                />
-                <mat-error
-                  *ngIf="email.errors?.['email'] && !email.errors?.['required']"
-                >
-                  Please enter a valid <strong>email address</strong>
-                </mat-error>
-                <mat-error *ngIf="email.errors?.['required']">
-                  Email is <strong>required</strong>
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Password</mat-label>
-                <input matInput type="password" formControlName="password" />
-                {{ form.errors }}
-                <mat-error
-                  *ngIf="password.errors?.['minlength'] && !password.errors?.['required']"
-                >
-                  The minimum length for the password is <strong>6</strong>
-                </mat-error>
-                <mat-error *ngIf="password.errors?.['required']">
-                  Password is <strong>required</strong>
-                </mat-error>
-              </mat-form-field>
-              <div class="flex justify-center">
-                <mat-error *ngIf="error">
-                  {{ error }}
-                </mat-error>
-              </div>
-            </form>
-          </mat-card-content>
-          <mat-card-actions align="end">
-            <button
-              [disabled]="form.invalid || isLoading"
-              mat-raised-button
-              color="primary"
-              type="submit"
-              (click)="handleSubmit()"
-            >
-              Sign up
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
+    <div class="fixed full-width" *ngIf="isLoading">
+      <mat-progress-bar mode="indeterminate" />
+    </div>
+    <div class="flex justify-center screen-margin">
+      <mat-card class="form-container">
+        <mat-card-content>
+          <form
+            class="flex column"
+            [formGroup]="form"
+            (ngSubmit)="handleSubmit()"
+          >
+            <mat-form-field class="mb-1">
+              <mat-label>Full name</mat-label>
+              <input matInput type="text" formControlName="fullname" />
+              <mat-error
+                *ngIf="fullname.errors?.['minlength'] && !fullname.errors?.['required']"
+              >
+                Please enter a valid <strong>fullname</strong>
+              </mat-error>
+              <mat-error *ngIf="fullname.errors?.['required']">
+                Full name is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="mb-1">
+              <mat-label>Email</mat-label>
+              <input
+                matInput
+                type="email"
+                formControlName="email"
+                placeholder="Ex. pat@example.com"
+              />
+              <mat-error
+                *ngIf="email.errors?.['email'] && !email.errors?.['required']"
+              >
+                Please enter a valid <strong>email address</strong>
+              </mat-error>
+              <mat-error *ngIf="email.errors?.['required']">
+                Email is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Password</mat-label>
+              <input matInput type="password" formControlName="password" />
+              {{ form.errors }}
+              <mat-error
+                *ngIf="password.errors?.['minlength'] && !password.errors?.['required']"
+              >
+                The minimum length for the password is <strong>6</strong>
+              </mat-error>
+              <mat-error *ngIf="password.errors?.['required']">
+                Password is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+            <div class="flex justify-center">
+              <mat-error *ngIf="error">
+                {{ error }}
+              </mat-error>
+            </div>
+          </form>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button
+            [disabled]="form.invalid || isLoading"
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="handleSubmit()"
+          >
+            Sign up
+          </button>
+        </mat-card-actions>
+      </mat-card>
     </div>
   `,
   styles: [],
