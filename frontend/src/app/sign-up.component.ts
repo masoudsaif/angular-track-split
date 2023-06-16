@@ -67,7 +67,7 @@ import ISignUp from './types/sign-up.interface';
             </div>
           </form>
         </mat-card-content>
-        <mat-card-actions class="flex justify-end">
+        <mat-card-actions align="end">
           <button
             [disabled]="form.invalid || isLoading"
             mat-raised-button

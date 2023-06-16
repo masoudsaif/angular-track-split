@@ -40,7 +40,6 @@ import IUser from './types/user.interface';
             <mat-form-field>
               <mat-label>Password</mat-label>
               <input matInput type="password" formControlName="password" />
-              {{ form.errors }}
               <mat-error
                 *ngIf="password.errors?.['minlength'] && !password.errors?.['required']"
               >
@@ -60,7 +59,7 @@ import IUser from './types/user.interface';
             </div>
           </form>
         </mat-card-content>
-        <mat-card-actions class="flex justify-end">
+        <mat-card-actions align="end">
           <button
             [disabled]="form.invalid || isLoading"
             mat-raised-button

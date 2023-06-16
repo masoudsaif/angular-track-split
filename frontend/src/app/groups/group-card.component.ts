@@ -7,12 +7,12 @@ import { Router } from '@angular/router';
   template: `
     <mat-card>
       <mat-card-content>
-        <span class="flex align-center justify-between"
+        <span class="flex align-center justify-between capitalize"
           >{{ group.title }}
           <button
             mat-raised-button
             color="primary"
-            (click)="this.router.navigate(['groups', 'group', group._id])"
+            (click)="this.router.navigate(['groups', group._id])"
           >
             Open
           </button>

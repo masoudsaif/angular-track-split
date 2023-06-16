@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment.development';
+import { environment as env } from 'src/environments/environment.development';
 
 import IResponse from '../types/response.inteface';
 import ISignIn from '../types/sign-in.interface';
@@ -19,16 +19,15 @@ export class AuthService {
   user = signal<IUser | null>(null);
 
   signIn(data: ISignIn) {
-    console.log(data);
     return this.http.post<IResponse<string>>(
-      `${environment.SERVER_URL}users/signin`,
+      `${env.SERVER_URL}users/signin`,
       data
     );
   }
 
   signUp(data: ISignUp) {
     return this.http.post<IResponse<ISignUpResponse>>(
-      `${environment.SERVER_URL}users/signup`,
+      `${env.SERVER_URL}users/signup`,
       data
     );
   }

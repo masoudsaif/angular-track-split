@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import IResponse from 'src/app/types/response.inteface';
 import { environment as env } from 'src/environments/environment.development';
+
 import IFullGroup from '../types/full-group.inteface';
 import IGroup from '../types/group.interface';
 import IMember from '../types/member.interface';
@@ -12,16 +13,15 @@ import IMember from '../types/member.interface';
 export class GroupsService {
   private http = inject(HttpClient);
   requests = signal<IGroup[]>([]);
-  groups = signal<IGroup[]>([]);
+  groups = signal<(IGroup | IFullGroup)[]>([]);
 
-  addGroup(group: IGroup) {
-    return this.http.post<IResponse<IFullGroup>>(
-      `${env.SERVER_URL}groups`,
-      group
-    );
+  addGroup(title: string) {
+    return this.http.post<IResponse<IFullGroup>>(`${env.SERVER_URL}groups`, {
+      title,
+    });
   }
 
-  getGroups(pending: boolean) {
+  getGroups(pending?: boolean) {
     return this.http.get<IResponse<IGroup[]>>(
       `${env.SERVER_URL}groups${pending ? '?pending=true' : ''}`
     );
@@ -64,5 +64,11 @@ export class GroupsService {
     return this.http.get<IResponse<any>>(
       `${env.SERVER_URL}groups/${groupId}/transactions/${transactionId}`
     );
+  }
+
+  pushGroup(group: IFullGroup | IGroup) {
+    const temp = this.groups();
+    temp.push(group);
+    this.groups.set(temp);
   }
 }
