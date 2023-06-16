@@ -33,6 +33,23 @@ export const get_groups = async (req, res, next) => {
         next(error)
     }
 }
+
+export const get_group_by_id = async (req, res, next) => {
+    try {
+        const { tokenData } = req.body;
+        const { group_id } = req.params;
+
+        const results = await groupsModel.findOne({
+            _id: group_id,
+            members: { $elemMatch: { 'user_id': tokenData._id, pending: false } }
+        }).lean();
+        res.json({ success: true, data: results })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const update_member_pending_status_by_id = async (req, res, next) => {
     try {
         const { group_id, member_id } = req.params;

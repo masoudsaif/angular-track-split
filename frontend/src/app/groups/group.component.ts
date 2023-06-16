@@ -69,6 +69,8 @@ import { AddMemberDialogComponent } from './add-member-dialog.component';
   styles: [],
 })
 export class GroupComponent {
+  //TODO: transaction interface and transaction grid
+
   private groups = inject(GroupsService);
   private activeRoute = inject(ActivatedRoute);
   dialog = inject(MatDialog);
@@ -86,26 +88,11 @@ export class GroupComponent {
 
   ngOnInit() {
     this.getMembers();
-
-    this.groups
-      .getTransactions(
-        this.activeRoute.snapshot.paramMap.get('group_id') as string
-      )
-      .pipe(
-        catchError((e) => {
-          return throwError(
-            () => new Error('Something bad happened; please try again later.')
-          );
-        })
-      )
-      .subscribe((res: any) => {
-        this.group.transactions = res.data;
-      });
   }
 
   getMembers() {
     this.groups
-      .getGroupMembers(
+      .getGroupById(
         this.activeRoute.snapshot.paramMap.get('group_id') as string
       )
       .pipe(
@@ -115,9 +102,10 @@ export class GroupComponent {
           );
         })
       )
-      .subscribe((res: IResponse<IMember[]>) => {
+      .subscribe((res: IResponse<IFullGroup>) => {
         console.log(res);
-        this.group.members = res.data;
+        this.group.members = res.data.members;
+        this.group.transactions = res.data.transactions;
       });
   }
 

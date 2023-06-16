@@ -15,6 +15,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDhiY2U5N
 
 ###
 
+GET http://localhost:3000/groups/648ca7a3a7970fb69dfec3a2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDhiY2U5NjRiNDE0YWNkYTFiN2NmOWYiLCJmdWxsbmFtZSI6IlRoZW8gU2FhZCIsImVtYWlsIjoidGhlb29AbWl1LmVkdSIsImlhdCI6MTY4Njg4Mzk5MH0.WN9VJ-2d8VZUXc7hySDbN5uDpptByhjs-hLWJZ6zQFM
+
+
+
+###
+
 POST http://localhost:3000/groups/648bced34b414acda1b7cfa1/members
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg4Y2E5MzIwOGQxNjgyMDVlZTVjODQiLCJmdWxsbmFtZSI6IkFzYWFkIFNhYWQiLCJlbWFpbCI6ImFzYWFkQG1pdS5lZHUiLCJpYXQiOjE2ODY2ODc4OTR9.mDqiMQqlPKyHrzjPrCCeDB6GAyK0EfY7rM1ewImgiNk

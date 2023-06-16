@@ -186,3 +186,7 @@ body {
 .remove-margin {
   margin: 0 !important;
 }
+
+.mat-mdc-form-field {
+  width: 100%;
+}

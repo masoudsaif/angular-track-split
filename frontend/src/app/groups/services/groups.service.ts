@@ -7,6 +7,7 @@ import IFullGroup from '../types/full-group.inteface';
 import IGroup from '../types/group.interface';
 import IMember from '../types/member.interface';
 import { AuthService } from 'src/app/services/auth.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +27,12 @@ export class GroupsService {
   getGroups(pending?: boolean) {
     return this.http.get<IResponse<IGroup[]>>(
       `${env.SERVER_URL}groups${pending ? '?pending=true' : ''}`
+    );
+  }
+
+  getGroupById(group_Id: string): Observable<IResponse<IFullGroup>> {
+    return this.http.get<IResponse<IFullGroup>>(
+      `${env.SERVER_URL}groups/${group_Id}`
     );
   }
 
