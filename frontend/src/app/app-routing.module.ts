@@ -7,8 +7,7 @@ import { SignUpComponent } from './sign-up.component';
 
 const routes: Routes = [
   {
-    path: '',
-    pathMatch: 'full',
+    path: 'groups',
     loadChildren: () =>
       import('./groups/groups.module').then((m) => m.GroupsModule),
     canActivate: [checkTokenGuard],
@@ -20,6 +19,11 @@ const routes: Routes = [
   {
     path: 'sign-up',
     component: SignUpComponent,
+  },
+  {
+    path: '',
+    redirectTo: 'groups',
+    pathMatch: 'full',
   },
 ];
 
