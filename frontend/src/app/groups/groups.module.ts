@@ -15,6 +15,7 @@ import { GroupComponent } from './group.component';
 import { GroupRoutingModule } from './groups-routing.module';
 import { GroupsComponent } from './groups.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AddMemberDialogComponent } from './add-member-dialog.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     GroupCardComponent,
     GroupComponent,
     AddGroupDialogComponent,
+    AddMemberDialogComponent,
   ],
   imports: [
     CommonModule,

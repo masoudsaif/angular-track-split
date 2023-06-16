@@ -27,10 +27,10 @@ export class GroupsService {
     );
   }
 
-  addGroupMember(member: IMember, groupId: string) {
-    return this.http.post<IResponse<IGroup[]>>(
+  addGroupMember(email: string, groupId: string) {
+    return this.http.post<IResponse<Boolean>>(
       `${env.SERVER_URL}groups/${groupId}/members`,
-      member
+      { email }
     );
   }
 
