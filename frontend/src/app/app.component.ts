@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from './services/auth.service';
+import { GroupsService } from './groups/services/groups.service';
 
 @Component({
   selector: 'app-root',
@@ -19,24 +20,55 @@ import { AuthService } from './services/auth.service';
       </div>
     </mat-toolbar>
     <ng-template #auth>
-      <mat-icon matBadge="15" matBadgeColor="warn" [matMenuTriggerFor]="menu"
+      <mat-icon
+        [matBadge]="groupsService.requests().length"
+        [matBadgeHidden]="groupsService.requests().length === 0"
+        matBadgeColor="warn"
+        [matMenuTriggerFor]="menu"
         >notifications</mat-icon
       >
       <button mat-button class="m-2" (click)="authService.signOut()">
         Sign out
       </button>
       <mat-menu #menu>
-        <app-notification title="Florida" />
-        <mat-divider />
-        <app-notification title="Texas" />
-        <mat-divider />
-        <app-notification title="Texas" />
+        <mat-progress-bar
+          mode="indeterminate"
+          class="fixed"
+          *ngIf="isLoading"
+        />
+        <div *ngIf="groupsService.requests().length !== 0; else emptyRequests">
+          <div
+            *ngFor="
+              let group of groupsService.requests();
+              index as index;
+              last as last
+            "
+          >
+            <app-notification
+              [group]="group"
+              [index]="index"
+              [isLoading]="isLoading"
+            />
+            <mat-divider *ngIf="!last" />
+          </div>
+        </div>
       </mat-menu>
+      <ng-template #emptyRequests>
+        <span class="p-2">You have no pending requests!</span>
+      </ng-template>
     </ng-template>
     <router-outlet></router-outlet>
   `,
-  styles: [],
+  styles: [
+    `
+      mat-progress-bar {
+        top: -8px;
+      }
+    `,
+  ],
 })
 export class AppComponent {
+  groupsService = inject(GroupsService);
   authService = inject(AuthService);
+  isLoading = false;
 }

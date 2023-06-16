@@ -12,14 +12,16 @@ import { AddGroupDialogComponent } from './add-group-dialog.component';
     <div class="relative">
       <mat-progress-bar mode="indeterminate" class="fixed" *ngIf="isLoading" />
       <div class="screen-margin flex column">
-        <div class="flex justify-end">
+        <div class="flex justify-between align-center mb-1">
+          <h2>Groups</h2>
           <button mat-fab color="basic" (click)="openDialog()">
             <mat-icon>add</mat-icon>
           </button>
         </div>
+        <mat-divider />
         <div
-          class="screen-margin gap-4 grid mt-2"
-          *ngIf="groupsService.groups().length; else empty"
+          class="gap-4 grid mt-2"
+          *ngIf="groupsService.groups().length; else emptyGroups"
         >
           <app-group-card
             *ngFor="let group of groupsService.groups()"
@@ -28,7 +30,7 @@ import { AddGroupDialogComponent } from './add-group-dialog.component';
         </div>
       </div>
     </div>
-    <ng-template #empty>
+    <ng-template #emptyGroups>
       <div *ngIf="!isLoading">
         <h1 class="text-center">You are not in any group yet!</h1>
       </div>

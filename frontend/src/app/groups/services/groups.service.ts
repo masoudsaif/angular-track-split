@@ -6,12 +6,14 @@ import { environment as env } from 'src/environments/environment.development';
 import IFullGroup from '../types/full-group.inteface';
 import IGroup from '../types/group.interface';
 import IMember from '../types/member.interface';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GroupsService {
   private http = inject(HttpClient);
+  private authService = inject(AuthService);
   requests = signal<IGroup[]>([]);
   groups = signal<(IGroup | IFullGroup)[]>([]);
 
@@ -40,10 +42,11 @@ export class GroupsService {
     );
   }
 
-  updateMemberPendingStatusById(member_id: string, groupId: string) {
-    return this.http.post<IResponse<IMember>>(
-      `${env.SERVER_URL}groups/${groupId}/members/:member_id`,
-      member_id
+  updateMemberPendingStatusById(groupId: string) {
+    return this.http.get<IResponse<IMember>>(
+      `${env.SERVER_URL}groups/${groupId}/members/${
+        this.authService.user()?._id
+      }`
     );
   }
 
@@ -67,8 +70,14 @@ export class GroupsService {
   }
 
   pushGroup(group: IFullGroup | IGroup) {
-    const temp = this.groups();
+    const temp = [...this.groups()];
     temp.push(group);
     this.groups.set(temp);
+  }
+
+  removeRequest(index: number) {
+    const temp = [...this.requests()];
+    temp.splice(index, 1);
+    this.requests.set(temp);
   }
 }

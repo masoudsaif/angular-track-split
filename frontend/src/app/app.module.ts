@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,13 +18,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { addTokenInterceptor } from './add-token.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthService } from './services/auth.service';
 import { TOKEN_KEY, USER_KEY } from './constants/keys';
+import { GroupsService } from './groups/services/groups.service';
 import { NotificationComponent } from './notification.component';
+import { AuthService } from './services/auth.service';
 import { SignInComponent } from './sign-in.component';
 import { SignUpComponent } from './sign-up.component';
 
-const bootstrap = (authService: AuthService) => {
+const bootstrap = (authService: AuthService, groupsService: GroupsService) => {
   return () => {
     const token =
       localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
@@ -33,6 +34,11 @@ const bootstrap = (authService: AuthService) => {
     if (token) {
       authService.token.set(token);
       authService.user.set(JSON.parse(user!));
+      groupsService.getGroups(true).subscribe((res) => {
+        if (res.success) {
+          groupsService.requests.set(res.data);
+        }
+      });
     }
   };
 };
@@ -56,7 +62,7 @@ const bootstrap = (authService: AuthService) => {
     MatInputModule,
     MatCardModule,
     MatCheckboxModule,
-    MatProgressSpinnerModule,
+    MatProgressBarModule,
     MatBadgeModule,
     MatMenuModule,
     MatDividerModule,
@@ -67,7 +73,7 @@ const bootstrap = (authService: AuthService) => {
       provide: APP_INITIALIZER,
       multi: true,
       useFactory: bootstrap,
-      deps: [AuthService],
+      deps: [AuthService, GroupsService],
     },
   ],
   bootstrap: [AppComponent],
