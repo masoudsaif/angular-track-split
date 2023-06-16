@@ -9,6 +9,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AddGroupDialogComponent } from './add-group-dialog.component';
 import { GroupCardComponent } from './group-card.component';
@@ -43,6 +47,10 @@ import { AddTransactionDialogComponent } from './add-transaction-dialog.componen
     MatInputModule,
     MatDividerModule,
     MatTableModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
   ],
 })
 export class GroupsModule {}

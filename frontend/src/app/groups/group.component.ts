@@ -188,6 +188,7 @@ export class GroupComponent {
     const dialogRef = this.dialog.open(AddTransactionDialogComponent, {
       data: {
         group_Id: this.activeRoute.snapshot.paramMap.get('group_id') as string,
+        group_members: this.group.members,
       },
     });
 
