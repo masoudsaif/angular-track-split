@@ -54,6 +54,18 @@ export const add_member = async (req, res, next) => {
         const member_to_add = await usersModel.findOne({ 'email': req.body.email }).lean();
         if (!member_to_add) throw new ErrorResponse('User not found', 404);
 
+        const group = await groupsModel
+        .findOne({
+          _id: group_id,
+        })
+        .lean();
+  
+      const hasMember = group.members.some(
+        (member) => member.email === member_to_add.email
+      );
+      if (hasMember)
+        throw new ErrorResponse("User is already a member of the group", 400);
+
         const results = await groupsModel.updateOne(
             { _id: group_id, members: { $elemMatch: { 'user_id': tokenData._id, pending: false } } },
             {

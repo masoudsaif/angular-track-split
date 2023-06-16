@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTableModule } from '@angular/material/table';
 
 import { AddGroupDialogComponent } from './add-group-dialog.component';
 import { GroupCardComponent } from './group-card.component';
@@ -16,6 +17,7 @@ import { GroupRoutingModule } from './groups-routing.module';
 import { GroupsComponent } from './groups.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddMemberDialogComponent } from './add-member-dialog.component';
+import { PlusOnePipe } from './plus-one.pipe';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { AddMemberDialogComponent } from './add-member-dialog.component';
     GroupComponent,
     AddGroupDialogComponent,
     AddMemberDialogComponent,
+    PlusOnePipe,
   ],
   imports: [
     CommonModule,
@@ -37,6 +40,7 @@ import { AddMemberDialogComponent } from './add-member-dialog.component';
     MatDialogModule,
     MatInputModule,
     MatDividerModule,
+    MatTableModule,
   ],
 })
 export class GroupsModule {}

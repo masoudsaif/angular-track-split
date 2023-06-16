@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { GroupsService } from './services/groups.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import IFullGroup from './types/full-group.inteface';
 import IResponse from '../types/response.inteface';
@@ -14,18 +14,54 @@ import { AddMemberDialogComponent } from './add-member-dialog.component';
     <div class="relative">
       <mat-progress-bar mode="indeterminate" class="fixed" *ngIf="isLoading" />
       <div class="screen-margin flex column">
-        <header class="flex justify-between">
-          <h2>{{ group.title | titlecase }}</h2>
+        <div class="flex align-center">
+          <mat-icon class="m-2" (click)="router.navigate(['../'])"
+            >arrow_backward</mat-icon
+          >
+          <h2 class="remove-margin">{{ group.title | titlecase }}</h2>
           <!-- <button mat-raised-button color="primary">Split Bill</button> -->
-        </header>
-      </div>
-      <mat-divider></mat-divider>
-      <div class="p-2">
-        <div class="flex justify-between">
-          <h3>Members</h3>
-          <button mat-fab color="basic" (click)="openDialog()">
-            <mat-icon>add</mat-icon>
-          </button>
+        </div>
+        <mat-divider />
+        <div class="mt-2">
+          <div class="flex justify-between">
+            <h3>Members</h3>
+            <button mat-fab color="basic" (click)="openDialog()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="mt-2">
+          <table
+            *ngIf="group.members.length"
+            mat-table
+            [dataSource]="group.members"
+            class="mat-elevation-z8"
+          >
+            <ng-container matColumnDef="number">
+              <th mat-header-cell *matHeaderCellDef>No.</th>
+              <td mat-cell *matCellDef="let element; index as i">
+                {{ i | plusOne }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let element">{{ element.fullname }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef>Email</th>
+              <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="pending">
+              <th mat-header-cell *matHeaderCellDef>Pending</th>
+              <td mat-cell *matCellDef="let element">{{ element.pending }}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
         </div>
       </div>
     </div>
@@ -36,6 +72,8 @@ export class GroupComponent {
   private groups = inject(GroupsService);
   private activeRoute = inject(ActivatedRoute);
   dialog = inject(MatDialog);
+  router = inject(Router);
+  displayedColumns: string[] = ['number', 'name', 'email', 'pending'];
 
   isLoading = false;
 
@@ -47,7 +85,25 @@ export class GroupComponent {
   };
 
   ngOnInit() {
-    //until we fix the api
+    this.getMembers();
+
+    this.groups
+      .getTransactions(
+        this.activeRoute.snapshot.paramMap.get('group_id') as string
+      )
+      .pipe(
+        catchError((e) => {
+          return throwError(
+            () => new Error('Something bad happened; please try again later.')
+          );
+        })
+      )
+      .subscribe((res: any) => {
+        this.group.transactions = res.data;
+      });
+  }
+
+  getMembers() {
     this.groups
       .getGroupMembers(
         this.activeRoute.snapshot.paramMap.get('group_id') as string
@@ -60,9 +116,11 @@ export class GroupComponent {
         })
       )
       .subscribe((res: IResponse<IMember[]>) => {
+        console.log(res);
         this.group.members = res.data;
       });
   }
+
   openDialog() {
     const dialogRef = this.dialog.open(AddMemberDialogComponent, {
       data: {
@@ -70,8 +128,10 @@ export class GroupComponent {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result: string) => {
-      this.group.members.push()
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.getMembers();
+      }
     });
   }
 }

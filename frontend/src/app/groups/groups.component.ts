@@ -12,7 +12,7 @@ import { AddGroupDialogComponent } from './add-group-dialog.component';
     <div class="relative">
       <mat-progress-bar mode="indeterminate" class="fixed" *ngIf="isLoading" />
       <div class="screen-margin flex column">
-        <div class="flex justify-between align-center mb-1">
+        <div class="flex justify-between align-center mb-2">
           <h2>Groups</h2>
           <button mat-fab color="basic" (click)="openDialog()">
             <mat-icon>add</mat-icon>

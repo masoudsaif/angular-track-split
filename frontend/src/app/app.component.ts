@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { GroupsService } from './groups/services/groups.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,7 @@ import { GroupsService } from './groups/services/groups.service';
       <button mat-icon-button aria-label="menu icon">
         <mat-icon>menu</mat-icon>
       </button>
-      <span class="one">Groups</span>
+      <span class="one" (click)="router.navigate([''])">Groups</span>
       <div *ngIf="!authService.user(); else auth">
         <button mat-button class="m-2" [routerLink]="['', 'sign-in']">
           Sign in
@@ -70,5 +71,6 @@ import { GroupsService } from './groups/services/groups.service';
 export class AppComponent {
   groupsService = inject(GroupsService);
   authService = inject(AuthService);
+  router = inject(Router);
   isLoading = false;
 }

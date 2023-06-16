@@ -87,10 +87,7 @@ export class AddMemberDialogComponent {
         })
       )
       .subscribe((res: IResponse<Boolean>) => {
-        debugger;
-        if (res.data && res.success) {
-          this.dialog.close('test');
-        }
+        this.dialog.close(res.data && res.success);
       });
   }
 
