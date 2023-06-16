@@ -6,7 +6,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import IResponse from '../types/response.inteface';
 
 @Component({
-  selector: 'app-add-member-dialog',
+  selector: 'app-add-transaction-dialog',
   template: `
     <form class="relative" [formGroup]="form" (ngSubmit)="handleSubmit()">
       <mat-progress-bar mode="indeterminate" class="fixed" *ngIf="isLoading" />
@@ -21,14 +21,6 @@ import IResponse from '../types/response.inteface';
             placeholder="Email"
             formControlName="email"
           />
-          <mat-error
-            *ngIf="email.errors?.['minlength'] && !email.errors?.['required']"
-          >
-            The minimum length for the title is <strong>3</strong>
-          </mat-error>
-          <mat-error *ngIf="email.errors?.['required']">
-            Title is <strong>required</strong>
-          </mat-error>
         </mat-form-field>
         <mat-error *ngIf="error">
           {{ error }}
@@ -50,28 +42,58 @@ import IResponse from '../types/response.inteface';
   `,
   styles: [],
 })
-export class AddMemberDialogComponent {
+export class AddTransactionDialogComponent {
   private dialog = inject(MatDialogRef);
   private groupsService = inject(GroupsService);
   form = inject(FormBuilder).nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
+    title: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    paid_by: ['', [Validators.required]],
+    category: ['', [Validators.required]],
+    amount: [null, [Validators.required]],
+    date: [null, [Validators.required]],
+    receipt: ['', [Validators.required]],
   });
-  addMember$: Subscription | null = null;
+  addTransaction$: Subscription | null = null;
   isLoading = false;
   data: { group_Id: string } = inject(MAT_DIALOG_DATA);
   error = '';
 
-  get email() {
-    return this.form.controls.email;
+  get title() {
+    return;
+  }
+
+  get description() {
+    return;
+  }
+
+  get paid_by() {
+    return;
+  }
+
+  get category() {
+    return;
+  }
+
+  get amount() {
+    return;
+  }
+
+  get date() {
+    return;
+  }
+
+  get receipt() {
+    return;
   }
 
   handleSubmit() {
     this.isLoading = true;
     this.error = '';
 
-    this.addMember$?.unsubscribe();
-    this.addMember$ = this.groupsService
-      .addGroupMember(this.form.value.email as string, this.data.group_Id)
+    this.addTransaction$?.unsubscribe();
+    this.addTransaction$ = this.groupsService
+      .addTransactions({}, this.data.group_Id)
       .pipe(
         catchError((e) => {
           this.error = e.error.data;
@@ -87,6 +109,6 @@ export class AddMemberDialogComponent {
   }
 
   ngOnDestroy() {
-    this.addMember$?.unsubscribe();
+    this.addTransaction$?.unsubscribe();
   }
 }

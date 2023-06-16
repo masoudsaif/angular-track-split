@@ -18,6 +18,7 @@ import { GroupsComponent } from './groups.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddMemberDialogComponent } from './add-member-dialog.component';
 import { PlusOnePipe } from './plus-one.pipe';
+import { AddTransactionDialogComponent } from './add-transaction-dialog.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { PlusOnePipe } from './plus-one.pipe';
     AddGroupDialogComponent,
     AddMemberDialogComponent,
     PlusOnePipe,
+    AddTransactionDialogComponent,
   ],
   imports: [
     CommonModule,
