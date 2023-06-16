@@ -11,8 +11,8 @@ import IMember from '../types/member.interface';
 })
 export class GroupsService {
   private http = inject(HttpClient);
-  request = signal({});
-  groups = signal<IGroup>({ _id: '', title: '' });
+  requests = signal<IGroup[]>([]);
+  groups = signal<IGroup[]>([]);
 
   addGroup(group: IGroup) {
     return this.http.post<IResponse<IFullGroup>>(
@@ -35,7 +35,7 @@ export class GroupsService {
   }
 
   getGroupMembers(groupId: string) {
-    return this.http.get<IResponse<IGroup[]>>(
+    return this.http.get<IResponse<IMember[]>>(
       `${env.SERVER_URL}groups/${groupId}/members`
     );
   }
