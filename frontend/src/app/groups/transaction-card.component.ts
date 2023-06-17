@@ -1,12 +1,19 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import ITransaction from './types/transaction.interface';
 import { environment as env } from 'src/environments/environment.development';
+import { MatDialog } from '@angular/material/dialog';
+import { ImageViewerDialogComponent } from './image-viewer-dialog.component';
 
 @Component({
   selector: 'app-transaction-card',
   template: `
     <mat-card>
-      <img [src]="receiptSrc" alt="receipt" class="receipt-image" />
+      <img
+        [src]="receiptSrc"
+        alt="receipt"
+        class="receipt-image"
+        (click)="openImageDialog()"
+      />
       <div class="mt-2">
         <div class="card-header">
           <mat-card-content class="title">{{
@@ -56,11 +63,17 @@ import { environment as env } from 'src/environments/environment.development';
   ],
 })
 export class TransactionCardComponent {
+  private dialog = inject(MatDialog);
   @Input({ required: true }) transaction!: ITransaction;
   receiptSrc = '';
-  //TODO: filters and image viewer
 
   ngOnInit() {
     this.receiptSrc = `${env.SERVER_URL}receipts/${this.transaction.receipt.filename}`;
+  }
+
+  openImageDialog() {
+    this.dialog.open(ImageViewerDialogComponent, {
+      data: this.receiptSrc,
+    });
   }
 }

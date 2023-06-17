@@ -30,6 +30,7 @@ import { MemberCardComponent } from './member-card.component';
 import { MemberSpentPipe } from './member-spent.pipe';
 import { PlusOnePipe } from './plus-one.pipe';
 import { TransactionCardComponent } from './transaction-card.component';
+import { ImageViewerDialogComponent } from './image-viewer-dialog.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { TransactionCardComponent } from './transaction-card.component';
     MemberBalancePipe,
     BalanceColorDirective,
     MemberSpentPipe,
+    ImageViewerDialogComponent,
   ],
   imports: [
     CommonModule,

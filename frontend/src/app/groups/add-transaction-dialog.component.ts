@@ -121,7 +121,7 @@ export class AddTransactionDialogComponent implements OnDestroy {
     amount: ['', [Validators.required, Validators.min(0.1)]],
     date: ['', [Validators.required]],
   });
-  data = inject(MAT_DIALOG_DATA);
+  groupId: string = inject(MAT_DIALOG_DATA);
   receipt = '';
   receiptSource: File | null = null;
   addTransaction$: Subscription | null = null;
@@ -177,7 +177,7 @@ export class AddTransactionDialogComponent implements OnDestroy {
     this.error = '';
     this.addTransaction$?.unsubscribe();
     this.addTransaction$ = this.groupsService
-      .addTransactions(formData, this.data.groupId)
+      .addTransactions(formData, this.groupId)
       .pipe(
         catchError((e) => {
           this.error = e.error.data;

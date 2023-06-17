@@ -171,7 +171,7 @@ export class GroupComponent implements OnInit {
 
   openAddMemberDialog() {
     const dialogRef = this.dialog.open(AddMemberDialogComponent, {
-      data: { groupId: this.groupId },
+      data: this.groupId,
     });
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
@@ -183,7 +183,7 @@ export class GroupComponent implements OnInit {
 
   openAddTransactionDialog() {
     const dialogRef = this.dialog.open(AddTransactionDialogComponent, {
-      data: { groupId: this.groupId },
+      data: this.groupId,
     });
 
     dialogRef.afterClosed().subscribe((result: boolean) => {

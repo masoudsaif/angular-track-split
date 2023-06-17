@@ -66,7 +66,7 @@ export class AddMemberDialogComponent implements OnDestroy {
   form = inject(FormBuilder).nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
   });
-  data = inject(MAT_DIALOG_DATA);
+  groupId: string = inject(MAT_DIALOG_DATA);
   addMember$: Subscription | null = null;
   isLoading = false;
   error = '';
@@ -81,7 +81,7 @@ export class AddMemberDialogComponent implements OnDestroy {
 
     this.addMember$?.unsubscribe();
     this.addMember$ = this.groupsService
-      .addGroupMember(this.form.value.email as string, this.data.groupId)
+      .addGroupMember(this.form.value.email as string, this.groupId)
       .pipe(
         catchError((e) => {
           this.error = e.error.data;
