@@ -24,6 +24,7 @@ import { GroupRoutingModule } from './groups-routing.module';
 import { GroupsComponent } from './groups.component';
 import { PlusOnePipe } from './plus-one.pipe';
 import { MemberCardComponent } from './member-card.component';
+import { TransactionCardComponent } from './transaction-card.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { MemberCardComponent } from './member-card.component';
     PlusOnePipe,
     AddTransactionDialogComponent,
     MemberCardComponent,
+    TransactionCardComponent,
   ],
   imports: [
     CommonModule,

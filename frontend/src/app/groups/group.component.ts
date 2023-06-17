@@ -75,41 +75,10 @@ import ITransaction from './types/transaction.interface';
         </div>
       </div>
       <div *ngIf="isTransactionsOpen">
-        <table
-          *ngIf="group.transactions.length; else test"
-          mat-table
-          [dataSource]="group.transactions"
-          class="mat-elevation-z8"
-        >
-          <ng-container matColumnDef="number">
-            <th mat-header-cell *matHeaderCellDef>No.</th>
-            <td mat-cell *matCellDef="let element; index as i">
-              {{ i | plusOne }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let element">
-              {{ element.fullname }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef>Email</th>
-            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="pending">
-            <th mat-header-cell *matHeaderCellDef>Pending</th>
-            <td mat-cell *matCellDef="let element">
-              {{ element.pending }}
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
+        <app-transaction-card
+          *ngFor="let item of group.transactions"
+          [transaction]="item"
+        />
       </div>
       <ng-template #test>
         <div *ngIf="!isLoading">
