@@ -36,14 +36,7 @@ import { AddGroupDialogComponent } from './add-group-dialog.component';
       </div>
     </ng-template>
   `,
-  styles: [
-    `
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      }
-    `,
-  ],
+  styles: [],
 })
 export class GroupsComponent {
   dialog = inject(MatDialog);
