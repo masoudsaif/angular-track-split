@@ -11,24 +11,25 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
-import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AddGroupDialogComponent } from './add-group-dialog.component';
 import { AddMemberDialogComponent } from './add-member-dialog.component';
 import { AddTransactionDialogComponent } from './add-transaction-dialog.component';
+import { BalanceColorDirective } from './balance-color.directive';
 import { GroupCardComponent } from './group-card.component';
 import { GroupComponent } from './group.component';
 import { GroupRoutingModule } from './groups-routing.module';
 import { GroupsComponent } from './groups.component';
-import { PlusOnePipe } from './plus-one.pipe';
-import { MemberCardComponent } from './member-card.component';
-import { TransactionCardComponent } from './transaction-card.component';
 import { MemberBalancePipe } from './member-balance.pipe';
-import { BalanceColorDirective } from './balance-color.directive';
+import { MemberCardComponent } from './member-card.component';
 import { MemberSpentPipe } from './member-spent.pipe';
+import { PlusOnePipe } from './plus-one.pipe';
+import { TransactionCardComponent } from './transaction-card.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { MemberSpentPipe } from './member-spent.pipe';
     MatFormFieldModule,
     MatNativeDateModule,
     MatListModule,
+    MatTooltipModule,
   ],
 })
 export class GroupsModule {}

@@ -28,7 +28,7 @@ import ITransaction from './types/transaction.interface';
       <mat-divider />
 
       <div class="mt-2">
-        <div class="flex justify-between">
+        <div class="flex justify-between align-center">
           <h3>Members ({{ group.members.length }})</h3>
           <button
             mat-fab
@@ -52,7 +52,7 @@ import ITransaction from './types/transaction.interface';
       </div>
 
       <div class="mt-4">
-        <div class="flex justify-between">
+        <div class="flex justify-between align-center">
           <h3 class="flex align-center">
             Transactions ({{ group.transactions.length }})
 
@@ -77,7 +77,7 @@ import ITransaction from './types/transaction.interface';
       <div *ngIf="isTransactionsOpen">
         <div
           class="gap-4 transaction-grid mt-2"
-          *ngIf="group.transactions.length; else noData"
+          *ngIf="group.transactions.length; else emptyTransactions"
         >
           <app-transaction-card
             *ngFor="let item of group.transactions"
@@ -85,11 +85,6 @@ import ITransaction from './types/transaction.interface';
           />
         </div>
       </div>
-      <ng-template #noData>
-        <div *ngIf="!isLoading">
-          <h1 class="text-center">No transactions yet!</h1>
-        </div>
-      </ng-template>
       <div class="mt-4 mb-2">
         <div class="flex">
           <h3 class="flex align-center">

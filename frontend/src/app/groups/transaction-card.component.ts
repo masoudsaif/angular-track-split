@@ -10,7 +10,7 @@ import { environment as env } from 'src/environments/environment.development';
       <div class="mt-2">
         <div class="card-header">
           <mat-card-content class="title">{{
-            transaction.title
+            transaction.title | titlecase
           }}</mat-card-content>
 
           <mat-card-content>{{
@@ -19,8 +19,18 @@ import { environment as env } from 'src/environments/environment.development';
         </div>
         <mat-divider />
         <div class="mt-1">
-          <mat-card-content>{{ transaction.description }}</mat-card-content>
-          <mat-card-content>{{ transaction.category }}</mat-card-content>
+          <mat-card-content>{{
+            transaction.category | titlecase
+          }}</mat-card-content>
+          <mat-card-content
+            ><label
+              class="one-line"
+              [matTooltip]="transaction.description"
+              matTooltipPosition="above"
+            >
+              {{ transaction.description }}
+            </label></mat-card-content
+          >
         </div>
       </div>
     </mat-card>

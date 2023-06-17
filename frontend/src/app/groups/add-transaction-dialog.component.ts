@@ -75,9 +75,7 @@ import IResponse from '../types/response.inteface';
               Choose File
             </button>
           </div>
-          <label class="text-ellipsis mt-1 one-line" *ngIf="receipt">{{
-            receipt
-          }}</label>
+          <label class="mt-1 one-line" *ngIf="receipt">{{ receipt }}</label>
           <mat-error class="mt-1" *ngIf="error">
             {{ error }}
           </mat-error>
