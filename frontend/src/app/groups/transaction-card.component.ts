@@ -17,8 +17,9 @@ import { environment as env } from 'src/environments/environment.development';
 })
 export class TransactionCardComponent {
   @Input({ required: true }) transaction!: ITransaction;
-  receiptSrc = `${env.SERVER_URL}receipts/${this.transaction.receipt.filename}`;
-  constructor() {
-    console.log(this.transaction);
+  receiptSrc = '';
+
+  ngOnInit() {
+    this.receiptSrc = `${env.SERVER_URL}receipts/${this.transaction.receipt.filename}`;
   }
 }
