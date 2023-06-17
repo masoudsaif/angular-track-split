@@ -27,7 +27,7 @@ import { AddTransactionDialogComponent } from './add-transaction-dialog.componen
       <mat-divider />
       <div class="mt-2">
         <div class="flex justify-between">
-          <h3>Members</h3>
+          <h3>Members - {{ group.members.length }}</h3>
           <button
             mat-fab
             color="basic"
@@ -38,39 +38,26 @@ import { AddTransactionDialogComponent } from './add-transaction-dialog.componen
           </button>
         </div>
       </div>
+
       <div class="mt-2">
-        <table
-          *ngIf="group.members.length"
-          mat-table
-          [dataSource]="group.members"
-          class="mat-elevation-z8"
-        >
-          <ng-container matColumnDef="number">
-            <th mat-header-cell *matHeaderCellDef>No.</th>
-            <td mat-cell *matCellDef="let element; index as i">
-              {{ i | plusOne }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.fullname }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef>Email</th>
-            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="pending">
-            <th mat-header-cell *matHeaderCellDef>Pending</th>
-            <td mat-cell *matCellDef="let element">{{ element.pending }}</td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
+        <div class="gap-4 grid mt-2" *ngIf="group.members.length">
+          <mat-card
+            class="align-center card-container"
+            *ngFor="let member of group.members"
+          >
+            <mat-card *ngIf="member.pending" class="badge">Pending</mat-card>
+            <mat-icon
+              aria-hidden="false"
+              class="icon"
+              style="font-size: 30px;"
+              fontIcon="person"
+            ></mat-icon>
+            <mat-card-content>{{ member.fullname }}</mat-card-content>
+            <mat-card-content>{{ member.email }}</mat-card-content>
+          </mat-card>
+        </div>
       </div>
+
       <div class="mt-4">
         <div class="flex justify-between">
           <h3>Transactions</h3>
@@ -124,7 +111,26 @@ import { AddTransactionDialogComponent } from './add-transaction-dialog.componen
       </ng-template>
     </div>
   `,
-  styles: [],
+  styles: [
+    `
+      .badge {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: #673ab7;
+        color: #fff;
+        padding: 5px;
+      }
+      .icon {
+        font-size: 82px !important;
+        width: 76px !important;
+        height: 82px !important;
+      }
+      .card-container {
+        position: relative;
+      }
+    `,
+  ],
 })
 export class GroupComponent {
   //TODO: transaction interface and transaction grid
@@ -139,7 +145,7 @@ export class GroupComponent {
 
   group: IFullGroup = {
     _id: '',
-    title: 'florida Trip',
+    title: '',
     members: <IMember[]>[],
     transactions: <ITransaction[]>[],
   };
@@ -164,8 +170,7 @@ export class GroupComponent {
       )
       .subscribe((res: IResponse<IFullGroup>) => {
         console.log(res);
-        this.group.members = res.data.members;
-        this.group.transactions = res.data.transactions;
+        this.group = res.data;
         this.isLoading = false;
       });
   }
