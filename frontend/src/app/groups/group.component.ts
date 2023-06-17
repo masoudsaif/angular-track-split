@@ -51,7 +51,7 @@ import ITransaction from './types/transaction.interface';
         </div>
       </div>
 
-      <div class="mt-4 mb-2">
+      <div class="mt-4">
         <div class="flex justify-between">
           <h3 class="flex align-center">
             Transactions ({{ group.transactions.length }})
@@ -85,6 +85,39 @@ import ITransaction from './types/transaction.interface';
           <h1 class="text-center">No transactions yet!</h1>
         </div>
       </ng-template>
+      <div class="mt-4 mb-2">
+        <div class="flex">
+          <h3 class="flex align-center">
+            Split balance report
+
+            <mat-icon class="ml-2" (click)="isSplitOpen = !isSplitOpen">{{
+              isSplitOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'
+            }}</mat-icon>
+          </h3>
+        </div>
+        <div *ngIf="isSplitOpen">
+          <mat-list
+            role="list"
+            *ngIf="group.transactions.length; else emptyTransactions"
+          >
+            <mat-list-item role="listitem" *ngFor="let member of group.members">
+              {{ member.fullname }} spent
+              <strong>{{
+                member | memberSpent : group | currency : 'USD'
+              }}</strong>
+              in total => owes
+              <strong balanceColor [balance]="member | memberBalance : group">{{
+                member | memberBalance : group | currency : 'USD'
+              }}</strong>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+      <ng-template #emptyTransactions>
+        <div *ngIf="!isLoading">
+          <h1 class="text-center">No transactions yet!</h1>
+        </div>
+      </ng-template>
     </div>
   `,
   styles: [],
@@ -97,6 +130,7 @@ export class GroupComponent implements OnInit {
   private dialog = inject(MatDialog);
   router = inject(Router);
   isTransactionsOpen = false;
+  isSplitOpen = false;
   groupId = '';
   displayedColumns: string[] = ['number', 'name', 'email', 'pending'];
 
@@ -150,6 +184,19 @@ export class GroupComponent implements OnInit {
         this.getMembers();
       }
     });
+  }
+
+  calcMemberBalance(member: IMember) {
+    let sum = 0;
+    let paid = 0;
+    this.group.transactions.forEach((t) => {
+      sum += t.amount;
+      if (t.paid_by.user_id === member._id) {
+        paid += t.amount;
+      }
+    });
+
+    return paid - sum / this.group.members.length;
   }
 
   ngOnInit() {

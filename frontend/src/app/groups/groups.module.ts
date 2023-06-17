@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { MatListModule } from '@angular/material/list';
 
 import { AddGroupDialogComponent } from './add-group-dialog.component';
 import { AddMemberDialogComponent } from './add-member-dialog.component';
@@ -25,6 +26,9 @@ import { GroupsComponent } from './groups.component';
 import { PlusOnePipe } from './plus-one.pipe';
 import { MemberCardComponent } from './member-card.component';
 import { TransactionCardComponent } from './transaction-card.component';
+import { MemberBalancePipe } from './member-balance.pipe';
+import { BalanceColorDirective } from './balance-color.directive';
+import { MemberSpentPipe } from './member-spent.pipe';
 
 @NgModule({
   declarations: [
@@ -37,6 +41,9 @@ import { TransactionCardComponent } from './transaction-card.component';
     AddTransactionDialogComponent,
     MemberCardComponent,
     TransactionCardComponent,
+    MemberBalancePipe,
+    BalanceColorDirective,
+    MemberSpentPipe,
   ],
   imports: [
     CommonModule,
@@ -55,6 +62,7 @@ import { TransactionCardComponent } from './transaction-card.component';
     MatDatepickerModule,
     MatFormFieldModule,
     MatNativeDateModule,
+    MatListModule,
   ],
 })
 export class GroupsModule {}
