@@ -1,10 +1,10 @@
-import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Subscription, catchError, throwError } from 'rxjs';
-import { GroupsService } from './services/groups.service';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { catchError, Subscription, throwError } from 'rxjs';
+
 import IResponse from '../types/response.inteface';
-import { ActivatedRoute } from '@angular/router';
+import { GroupsService } from './services/groups.service';
 
 @Component({
   selector: 'app-add-member-dialog',
@@ -60,14 +60,13 @@ import { ActivatedRoute } from '@angular/router';
     `,
   ],
 })
-export class AddMemberDialogComponent {
+export class AddMemberDialogComponent implements OnDestroy {
   private dialog = inject(MatDialogRef);
-  private activeRoute = inject(ActivatedRoute);
   private groupsService = inject(GroupsService);
   form = inject(FormBuilder).nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
   });
-  groupId = this.activeRoute.snapshot.paramMap.get('group_id') as string;
+  data = inject(MAT_DIALOG_DATA);
   addMember$: Subscription | null = null;
   isLoading = false;
   error = '';
@@ -82,7 +81,7 @@ export class AddMemberDialogComponent {
 
     this.addMember$?.unsubscribe();
     this.addMember$ = this.groupsService
-      .addGroupMember(this.form.value.email as string, this.groupId)
+      .addGroupMember(this.form.value.email as string, this.data.groupId)
       .pipe(
         catchError((e) => {
           this.error = e.error.data;

@@ -1,6 +1,6 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, Subscription, throwError } from 'rxjs';
 
@@ -85,7 +85,7 @@ import IResponse from '../types/response.inteface';
             hidden
             #fileInput
             type="file"
-            accept="image/jpeg"
+            accept="image/*"
             (change)="handleReceiptChange($event)"
           />
         </div>
@@ -115,7 +115,6 @@ import IResponse from '../types/response.inteface';
 })
 export class AddTransactionDialogComponent implements OnDestroy {
   private dialog = inject(MatDialogRef);
-  private activeRoute = inject(ActivatedRoute);
   private groupsService = inject(GroupsService);
   form = inject(FormBuilder).nonNullable.group({
     title: ['', [Validators.required]],
@@ -124,7 +123,7 @@ export class AddTransactionDialogComponent implements OnDestroy {
     amount: ['', [Validators.required, Validators.min(0.1)]],
     date: ['', [Validators.required]],
   });
-  groupId = this.activeRoute.snapshot.paramMap.get('group_id') as string;
+  data = inject(MAT_DIALOG_DATA);
   receipt = '';
   receiptSource: File | null = null;
   addTransaction$: Subscription | null = null;
@@ -169,11 +168,18 @@ export class AddTransactionDialogComponent implements OnDestroy {
   handleSubmit() {
     console.log(this.form.value, this.receipt, this.receiptSource);
     const formData = new FormData();
+    Object.entries(this.form.value).forEach(([k, v]) => {
+      formData.append(k, v);
+    });
+    formData.delete('date');
+    const date = new Date(this.form.value.date!).getTime();
+    formData.append('date', date.toString());
+    formData.append('receipt', this.receiptSource!, this.receipt);
     this.isLoading = true;
     this.error = '';
     this.addTransaction$?.unsubscribe();
     this.addTransaction$ = this.groupsService
-      .addTransactions(formData, this.groupId)
+      .addTransactions(formData, this.data.groupId)
       .pipe(
         catchError((e) => {
           this.error = e.error.data;

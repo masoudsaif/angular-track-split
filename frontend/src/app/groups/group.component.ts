@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
@@ -28,7 +28,7 @@ import ITransaction from './types/transaction.interface';
       <mat-divider />
       <div class="mt-2">
         <div class="flex justify-between">
-          <h3>Members - {{ group.members.length }}</h3>
+          <h3>Members ({{ group.members.length }})</h3>
           <button
             mat-fab
             color="basic"
@@ -61,7 +61,7 @@ import ITransaction from './types/transaction.interface';
 
       <div class="mt-4">
         <div class="flex justify-between">
-          <h3>Transactions</h3>
+          <h3>Transactions ({{ group.transactions.length }})</h3>
           <button
             mat-fab
             color="basic"
@@ -107,7 +107,7 @@ import ITransaction from './types/transaction.interface';
       </div>
       <ng-template #test>
         <div *ngIf="!isLoading">
-          <h1 class="text-center">No Transactions Yet</h1>
+          <h1 class="text-center">No transactions yet!</h1>
         </div>
       </ng-template>
     </div>
@@ -118,26 +118,28 @@ import ITransaction from './types/transaction.interface';
         position: absolute;
         top: 5px;
         right: 5px;
-        background: #673ab7;
-        color: #fff;
+        background: #ffd740;
         padding: 5px;
       }
+
       .icon {
         font-size: 82px !important;
         width: 76px !important;
         height: 82px !important;
       }
+
       .card-container {
         position: relative;
       }
     `,
   ],
 })
-export class GroupComponent {
+export class GroupComponent implements OnInit {
   //TODO: transaction interface and transaction grid
 
   private groups = inject(GroupsService);
   private activeRoute = inject(ActivatedRoute);
+  groupId = '';
   dialog = inject(MatDialog);
   router = inject(Router);
   displayedColumns: string[] = ['number', 'name', 'email', 'pending'];
@@ -151,16 +153,10 @@ export class GroupComponent {
     transactions: <ITransaction[]>[],
   };
 
-  ngOnInit() {
-    this.getMembers();
-  }
-
   getMembers() {
     this.isLoading = true;
     this.groups
-      .getGroupById(
-        this.activeRoute.snapshot.paramMap.get('group_id') as string
-      )
+      .getGroupById(this.groupId)
       .pipe(
         catchError((e) => {
           this.isLoading = false;
@@ -177,7 +173,9 @@ export class GroupComponent {
   }
 
   openAddMemberDialog() {
-    const dialogRef = this.dialog.open(AddMemberDialogComponent);
+    const dialogRef = this.dialog.open(AddMemberDialogComponent, {
+      data: { groupId: this.groupId },
+    });
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
@@ -187,12 +185,19 @@ export class GroupComponent {
   }
 
   openAddTransactionDialog() {
-    const dialogRef = this.dialog.open(AddTransactionDialogComponent);
+    const dialogRef = this.dialog.open(AddTransactionDialogComponent, {
+      data: { groupId: this.groupId },
+    });
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
         this.getMembers();
       }
     });
+  }
+
+  ngOnInit() {
+    this.groupId = this.activeRoute.snapshot.paramMap.get('group_id') as string;
+    this.getMembers();
   }
 }
