@@ -31,7 +31,7 @@ import { AddGroupDialogComponent } from './add-group-dialog.component';
       </div>
     </div>
     <ng-template #emptyGroups>
-      <div *ngIf="!isLoading">
+      <div *ngIf="!isLoading" class="mt-2">
         <h1 class="text-center">You are not in any group yet!</h1>
       </div>
     </ng-template>
@@ -59,6 +59,14 @@ export class GroupsComponent {
       .subscribe((res) => {
         this.isLoading = false;
         this.groupsService.groups.set(res.data);
+        this.groupsService
+          .getGroups(true)
+          .pipe(takeUntilDestroyed())
+          .subscribe((res) => {
+            if (res.success) {
+              this.groupsService.requests.set(res.data);
+            }
+          });
       });
   }
 

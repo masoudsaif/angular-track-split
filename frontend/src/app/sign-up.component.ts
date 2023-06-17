@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { catchError, Subscription, throwError } from 'rxjs';
 
 import { TOKEN_KEY, USER_KEY } from './constants/keys';
-import { GroupsService } from './groups/services/groups.service';
 import { AuthService } from './services/auth.service';
 import ISignUp from './types/sign-up.interface';
 
@@ -90,7 +89,6 @@ import ISignUp from './types/sign-up.interface';
 export class SignUpComponent implements OnDestroy {
   private router = inject(Router);
   private authService = inject(AuthService);
-  private groupsService = inject(GroupsService);
   form = inject(FormBuilder).nonNullable.group({
     fullname: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
@@ -99,7 +97,6 @@ export class SignUpComponent implements OnDestroy {
   isLoading = false;
   error = '';
   signUp$: Subscription | null = null;
-  getGroups$: Subscription | null = null;
 
   get fullname() {
     return this.form.controls.fullname;
@@ -134,19 +131,11 @@ export class SignUpComponent implements OnDestroy {
         this.isLoading = false;
         sessionStorage.setItem(TOKEN_KEY, res.data.token);
         sessionStorage.setItem(USER_KEY, JSON.stringify(res.data));
-        this.getGroups$ = this.groupsService
-          .getGroups(true)
-          .subscribe((res) => {
-            if (res.success) {
-              this.groupsService.requests.set(res.data);
-            }
-          });
         this.router.navigate(['']);
       });
   }
 
   ngOnDestroy() {
     this.signUp$?.unsubscribe();
-    this.getGroups$?.unsubscribe();
   }
 }

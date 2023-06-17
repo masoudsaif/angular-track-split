@@ -5,7 +5,6 @@ import jwtDecode from 'jwt-decode';
 import { catchError, Subscription, throwError } from 'rxjs';
 
 import { TOKEN_KEY, USER_KEY } from './constants/keys';
-import { GroupsService } from './groups/services/groups.service';
 import { AuthService } from './services/auth.service';
 import ISignIn from './types/sign-in.interface';
 import IUser from './types/user.interface';
@@ -82,7 +81,6 @@ import IUser from './types/user.interface';
 export class SignInComponent implements OnDestroy {
   private router = inject(Router);
   private authService = inject(AuthService);
-  private groupsService = inject(GroupsService);
   form = inject(FormBuilder).nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -91,7 +89,6 @@ export class SignInComponent implements OnDestroy {
   isLoading = false;
   error = '';
   signIn$: Subscription | null = null;
-  getGroups$: Subscription | null = null;
 
   get email() {
     return this.form.controls.email;
@@ -125,19 +122,11 @@ export class SignInComponent implements OnDestroy {
         this.isLoading = false;
         storage.setItem(TOKEN_KEY, res.data);
         storage.setItem(USER_KEY, JSON.stringify(user));
-        this.getGroups$ = this.groupsService
-          .getGroups(true)
-          .subscribe((res) => {
-            if (res.success) {
-              this.groupsService.requests.set(res.data);
-            }
-          });
         this.router.navigate(['']);
       });
   }
 
   ngOnDestroy() {
     this.signIn$?.unsubscribe();
-    this.getGroups$?.unsubscribe();
   }
 }

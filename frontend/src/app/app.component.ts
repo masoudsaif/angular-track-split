@@ -68,4 +68,10 @@ export class AppComponent {
   authService = inject(AuthService);
   router = inject(Router);
   isLoading = false;
+
+  handleSignOut() {
+    this.authService.signOut();
+    this.groupsService.groups.set([]);
+    this.groupsService.requests.set([]);
+  }
 }
