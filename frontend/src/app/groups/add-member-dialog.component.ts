@@ -4,6 +4,7 @@ import { Subscription, catchError, throwError } from 'rxjs';
 import { GroupsService } from './services/groups.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import IResponse from '../types/response.inteface';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-member-dialog',
@@ -61,13 +62,14 @@ import IResponse from '../types/response.inteface';
 })
 export class AddMemberDialogComponent {
   private dialog = inject(MatDialogRef);
+  private activeRoute = inject(ActivatedRoute);
   private groupsService = inject(GroupsService);
   form = inject(FormBuilder).nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
   });
+  groupId = this.activeRoute.snapshot.paramMap.get('group_id') as string;
   addMember$: Subscription | null = null;
   isLoading = false;
-  data: { group_Id: string } = inject(MAT_DIALOG_DATA);
   error = '';
 
   get email() {
@@ -80,7 +82,7 @@ export class AddMemberDialogComponent {
 
     this.addMember$?.unsubscribe();
     this.addMember$ = this.groupsService
-      .addGroupMember(this.form.value.email as string, this.data.group_Id)
+      .addGroupMember(this.form.value.email as string, this.groupId)
       .pipe(
         catchError((e) => {
           this.error = e.error.data;

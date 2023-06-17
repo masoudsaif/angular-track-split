@@ -1,14 +1,15 @@
 import { Component, inject } from '@angular/core';
-import { GroupsService } from './services/groups.service';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
-import IFullGroup from './types/full-group.inteface';
+
 import IResponse from '../types/response.inteface';
-import IMember from './types/member.interface';
-import { MatDialog } from '@angular/material/dialog';
 import { AddMemberDialogComponent } from './add-member-dialog.component';
-import ITransaction from './types/transaction.interface';
 import { AddTransactionDialogComponent } from './add-transaction-dialog.component';
+import { GroupsService } from './services/groups.service';
+import IFullGroup from './types/full-group.inteface';
+import IMember from './types/member.interface';
+import ITransaction from './types/transaction.interface';
 
 @Component({
   selector: 'app-group',
@@ -171,11 +172,7 @@ export class GroupComponent {
   }
 
   openAddMemberDialog() {
-    const dialogRef = this.dialog.open(AddMemberDialogComponent, {
-      data: {
-        group_Id: this.activeRoute.snapshot.paramMap.get('group_id') as string,
-      },
-    });
+    const dialogRef = this.dialog.open(AddMemberDialogComponent);
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
@@ -185,12 +182,7 @@ export class GroupComponent {
   }
 
   openAddTransactionDialog() {
-    const dialogRef = this.dialog.open(AddTransactionDialogComponent, {
-      data: {
-        group_Id: this.activeRoute.snapshot.paramMap.get('group_id') as string,
-        group_members: this.group.members,
-      },
-    });
+    const dialogRef = this.dialog.open(AddTransactionDialogComponent);
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {

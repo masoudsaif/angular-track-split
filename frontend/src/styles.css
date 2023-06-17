@@ -18,6 +18,13 @@ body {
   text-align: center;
 }
 
+.one-line {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .relative {
   display: relative;
 }
@@ -180,9 +187,14 @@ body {
   width: 50%;
 }
 
+.max-width-100 {
+  max-width: 100px;
+}
+
 .screen-margin {
   margin: 28px 20px 28px 20px;
 }
+
 .remove-margin {
   margin: 0 !important;
 }

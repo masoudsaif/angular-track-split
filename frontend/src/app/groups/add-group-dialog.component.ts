@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { catchError, Subscription, throwError } from 'rxjs';
 
 import { GroupsService } from './services/groups.service';
@@ -58,7 +58,7 @@ import { GroupsService } from './services/groups.service';
   ],
 })
 export class AddGroupDialogComponent implements OnDestroy {
-  private dialog = inject(MatDialog);
+  private dialog = inject(MatDialogRef);
   private groupsService = inject(GroupsService);
   form = inject(FormBuilder).nonNullable.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
@@ -86,7 +86,7 @@ export class AddGroupDialogComponent implements OnDestroy {
       .subscribe((res) => {
         if (res.success) {
           this.groupsService.pushGroup(res.data);
-          this.dialog.closeAll();
+          this.dialog.close();
         }
       });
   }

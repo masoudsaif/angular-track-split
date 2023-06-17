@@ -57,7 +57,7 @@ export class GroupsService {
     );
   }
 
-  addTransactions(transaction: any, groupId: string) {
+  addTransactions(transaction: FormData, groupId: string) {
     return this.http.post<IResponse<any>>(
       `${env.SERVER_URL}groups/${groupId}/transactions`,
       transaction
