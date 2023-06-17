@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
@@ -26,6 +26,7 @@ import ITransaction from './types/transaction.interface';
         <!-- <button mat-raised-button color="primary">Split Bill</button> -->
       </div>
       <mat-divider />
+
       <div class="mt-2">
         <div class="flex justify-between">
           <h3>Members ({{ group.members.length }})</h3>
@@ -42,26 +43,27 @@ import ITransaction from './types/transaction.interface';
 
       <div class="mt-2">
         <div class="gap-4 grid mt-2" *ngIf="group.members.length">
-          <mat-card
+          <app-member-card
             class="align-center card-container"
             *ngFor="let member of group.members"
-          >
-            <mat-card *ngIf="member.pending" class="badge">Pending</mat-card>
-            <mat-icon
-              aria-hidden="false"
-              class="icon"
-              style="font-size: 30px;"
-              fontIcon="person"
-            ></mat-icon>
-            <mat-card-content>{{ member.fullname }}</mat-card-content>
-            <mat-card-content>{{ member.email }}</mat-card-content>
-          </mat-card>
+            [member]="member"
+          />
         </div>
       </div>
 
-      <div class="mt-4">
+      <div class="mt-4 mb-2">
         <div class="flex justify-between">
-          <h3>Transactions ({{ group.transactions.length }})</h3>
+          <h3 class="flex align-center">
+            Transactions ({{ group.transactions.length }})
+
+            <mat-icon
+              class="ml-2"
+              (click)="isTransactionsOpen = !isTransactionsOpen"
+              >{{
+                isTransactionsOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'
+              }}</mat-icon
+            >
+          </h3>
           <button
             mat-fab
             color="basic"
@@ -72,7 +74,7 @@ import ITransaction from './types/transaction.interface';
           </button>
         </div>
       </div>
-      <div class="mt-2">
+      <div *ngIf="isTransactionsOpen">
         <table
           *ngIf="group.transactions.length; else test"
           mat-table
@@ -88,7 +90,9 @@ import ITransaction from './types/transaction.interface';
 
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.fullname }}</td>
+            <td mat-cell *matCellDef="let element">
+              {{ element.fullname }}
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="email">
@@ -98,7 +102,9 @@ import ITransaction from './types/transaction.interface';
 
           <ng-container matColumnDef="pending">
             <th mat-header-cell *matHeaderCellDef>Pending</th>
-            <td mat-cell *matCellDef="let element">{{ element.pending }}</td>
+            <td mat-cell *matCellDef="let element">
+              {{ element.pending }}
+            </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -112,36 +118,17 @@ import ITransaction from './types/transaction.interface';
       </ng-template>
     </div>
   `,
-  styles: [
-    `
-      .badge {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        background: #ffd740;
-        padding: 5px;
-      }
-
-      .icon {
-        font-size: 82px !important;
-        width: 76px !important;
-        height: 82px !important;
-      }
-
-      .card-container {
-        position: relative;
-      }
-    `,
-  ],
+  styles: [],
 })
 export class GroupComponent implements OnInit {
   //TODO: transaction interface and transaction grid
 
   private groups = inject(GroupsService);
   private activeRoute = inject(ActivatedRoute);
-  groupId = '';
-  dialog = inject(MatDialog);
+  private dialog = inject(MatDialog);
   router = inject(Router);
+  isTransactionsOpen = false;
+  groupId = '';
   displayedColumns: string[] = ['number', 'name', 'email', 'pending'];
 
   isLoading = false;

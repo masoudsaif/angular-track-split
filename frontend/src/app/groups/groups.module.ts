@@ -1,28 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
 
 import { AddGroupDialogComponent } from './add-group-dialog.component';
+import { AddMemberDialogComponent } from './add-member-dialog.component';
+import { AddTransactionDialogComponent } from './add-transaction-dialog.component';
 import { GroupCardComponent } from './group-card.component';
 import { GroupComponent } from './group.component';
 import { GroupRoutingModule } from './groups-routing.module';
 import { GroupsComponent } from './groups.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { AddMemberDialogComponent } from './add-member-dialog.component';
 import { PlusOnePipe } from './plus-one.pipe';
-import { AddTransactionDialogComponent } from './add-transaction-dialog.component';
+import { MemberCardComponent } from './member-card.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { AddTransactionDialogComponent } from './add-transaction-dialog.componen
     AddMemberDialogComponent,
     PlusOnePipe,
     AddTransactionDialogComponent,
+    MemberCardComponent,
   ],
   imports: [
     CommonModule,
