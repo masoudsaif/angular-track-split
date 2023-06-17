@@ -5,19 +5,50 @@ import { environment as env } from 'src/environments/environment.development';
 @Component({
   selector: 'app-transaction-card',
   template: `
-    <mat-card class="align-center">
-      <img [src]="receiptSrc" alt="receipt" />
-      <mat-card-content>{{ transaction.title }}</mat-card-content>
-      <mat-card-content>{{ transaction.description }}</mat-card-content>
-      <mat-card-content>{{ transaction.amount }}</mat-card-content>
-      <mat-card-content>{{ transaction.category }}</mat-card-content>
+    <mat-card>
+      <img [src]="receiptSrc" alt="receipt" class="receipt-image" />
+      <div class="mt-2">
+        <div class="card-header">
+          <mat-card-content class="title">{{
+            transaction.title
+          }}</mat-card-content>
+
+          <mat-card-content>{{
+            transaction.amount | currency : 'USD'
+          }}</mat-card-content>
+        </div>
+        <mat-divider />
+        <div class="mt-1">
+          <mat-card-content>{{ transaction.description }}</mat-card-content>
+          <mat-card-content>{{ transaction.category }}</mat-card-content>
+        </div>
+      </div>
     </mat-card>
   `,
-  styles: [],
+  styles: [
+    `
+      .receipt-image {
+        width: 100%;
+        height: 250px;
+        object-fit: contain;
+      }
+      .title {
+        font-size: 20px;
+        font-weight: 500;
+        text-transform: capitalize;
+      }
+      .card-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+    `,
+  ],
 })
 export class TransactionCardComponent {
   @Input({ required: true }) transaction!: ITransaction;
   receiptSrc = '';
+  //TODO: filters and image viewer
 
   ngOnInit() {
     this.receiptSrc = `${env.SERVER_URL}receipts/${this.transaction.receipt.filename}`;

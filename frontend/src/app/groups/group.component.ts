@@ -75,19 +75,31 @@ import ITransaction from './types/transaction.interface';
         </div>
       </div>
       <div *ngIf="isTransactionsOpen">
-        <app-transaction-card
-          *ngFor="let item of group.transactions"
-          [transaction]="item"
-        />
+        <div
+          class="gap-4 transaction-grid mt-2"
+          *ngIf="group.transactions.length; else noData"
+        >
+          <app-transaction-card
+            *ngFor="let item of group.transactions"
+            [transaction]="item"
+          />
+        </div>
       </div>
-      <ng-template #test>
+      <ng-template #noData>
         <div *ngIf="!isLoading">
           <h1 class="text-center">No transactions yet!</h1>
         </div>
       </ng-template>
     </div>
   `,
-  styles: [],
+  styles: [
+    `
+      .transaction-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    `,
+  ],
 })
 export class GroupComponent implements OnInit {
   //TODO: transaction interface and transaction grid
