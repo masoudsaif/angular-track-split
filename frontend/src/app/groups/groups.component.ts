@@ -47,7 +47,7 @@ export class GroupsComponent implements OnDestroy {
   getGroups$: Subscription | null = null;
 
   constructor() {
-    this.title.setTitle('Sign in');
+    this.title.setTitle('Groups');
     this.isLoading = true;
     this.groupsService
       .getGroups()
