@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   selector: 'app-root',
   template: `
     <mat-toolbar color="primary">
-      <span class="one" (click)="router.navigate([''])">Groups</span>
+      <span class="one" (click)="router.navigate([''])">Track and Split</span>
       <div *ngIf="!authService.user(); else auth">
         <button mat-button class="m-2" [routerLink]="['', 'sign-in']">
           Sign in

@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-import { GroupsService } from './services/groups.service';
-import { catchError, throwError } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { Title } from '@angular/platform-browser';
+import { catchError, Subscription, throwError } from 'rxjs';
+
 import { AddGroupDialogComponent } from './add-group-dialog.component';
+import { GroupsService } from './services/groups.service';
 
 @Component({
   selector: 'app-groups',
@@ -38,12 +39,15 @@ import { AddGroupDialogComponent } from './add-group-dialog.component';
   `,
   styles: [],
 })
-export class GroupsComponent {
-  dialog = inject(MatDialog);
+export class GroupsComponent implements OnDestroy {
+  private title = inject(Title);
+  private dialog = inject(MatDialog);
   groupsService = inject(GroupsService);
   isLoading = false;
+  getGroups$: Subscription | null = null;
 
   constructor() {
+    this.title.setTitle('Sign in');
     this.isLoading = true;
     this.groupsService
       .getGroups()
@@ -59,9 +63,8 @@ export class GroupsComponent {
       .subscribe((res) => {
         this.isLoading = false;
         this.groupsService.groups.set(res.data);
-        this.groupsService
+        this.getGroups$ = this.groupsService
           .getGroups(true)
-          .pipe(takeUntilDestroyed())
           .subscribe((res) => {
             if (res.success) {
               this.groupsService.requests.set(res.data);
@@ -72,5 +75,9 @@ export class GroupsComponent {
 
   openDialog() {
     this.dialog.open(AddGroupDialogComponent);
+  }
+
+  ngOnDestroy() {
+    this.getGroups$?.unsubscribe();
   }
 }

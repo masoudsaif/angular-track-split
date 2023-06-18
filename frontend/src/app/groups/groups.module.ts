@@ -11,7 +11,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
@@ -21,15 +20,16 @@ import { AddGroupDialogComponent } from './add-group-dialog.component';
 import { AddMemberDialogComponent } from './add-member-dialog.component';
 import { AddTransactionDialogComponent } from './add-transaction-dialog.component';
 import { BalanceColorDirective } from './directives/balance-color.directive';
+import { FilterDialogComponent } from './filter-dialog.component';
 import { GroupCardComponent } from './group-card.component';
 import { GroupComponent } from './group.component';
 import { GroupRoutingModule } from './groups-routing.module';
 import { GroupsComponent } from './groups.component';
-import { MemberBalancePipe } from './pipes/member-balance.pipe';
+import { ImageViewerDialogComponent } from './image-viewer-dialog.component';
 import { MemberCardComponent } from './member-card.component';
+import { MemberBalancePipe } from './pipes/member-balance.pipe';
 import { MemberSpentPipe } from './pipes/member-spent.pipe';
 import { TransactionCardComponent } from './transaction-card.component';
-import { ImageViewerDialogComponent } from './image-viewer-dialog.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +45,7 @@ import { ImageViewerDialogComponent } from './image-viewer-dialog.component';
     BalanceColorDirective,
     MemberSpentPipe,
     ImageViewerDialogComponent,
+    FilterDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -63,7 +64,6 @@ import { ImageViewerDialogComponent } from './image-viewer-dialog.component';
     MatDatepickerModule,
     MatFormFieldModule,
     MatNativeDateModule,
-    MatListModule,
     MatTooltipModule,
   ],
 })

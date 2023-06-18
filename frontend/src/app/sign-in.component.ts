@@ -8,6 +8,7 @@ import { TOKEN_KEY, USER_KEY } from './constants/keys';
 import { AuthService } from './services/auth.service';
 import ISignIn from './types/sign-in.interface';
 import IUser from './types/user.interface';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-sign-in',
@@ -81,6 +82,7 @@ import IUser from './types/user.interface';
 export class SignInComponent implements OnDestroy {
   private router = inject(Router);
   private authService = inject(AuthService);
+  private title = inject(Title);
   form = inject(FormBuilder).nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -96,6 +98,10 @@ export class SignInComponent implements OnDestroy {
 
   get password() {
     return this.form.controls.password;
+  }
+
+  constructor() {
+    this.title.setTitle('Sign in');
   }
 
   handleSubmit() {

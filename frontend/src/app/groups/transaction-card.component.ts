@@ -38,6 +38,13 @@ import { ImageViewerDialogComponent } from './image-viewer-dialog.component';
               {{ transaction.description }}
             </label></mat-card-content
           >
+          <div class="flex justify-end">
+            <mat-card-content
+              ><label class="date">
+                {{ transaction.date | date }}
+              </label></mat-card-content
+            >
+          </div>
         </div>
       </div>
     </mat-card>
@@ -49,15 +56,22 @@ import { ImageViewerDialogComponent } from './image-viewer-dialog.component';
         height: 250px;
         object-fit: contain;
       }
+
       .title {
         font-size: 20px;
         font-weight: 500;
         text-transform: capitalize;
       }
+
       .card-header {
         display: flex;
         align-items: baseline;
         justify-content: space-between;
+      }
+
+      .date {
+        color: #8d8d8d;
+        font-size: 14px;
       }
     `,
   ],

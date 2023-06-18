@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
@@ -6,10 +6,14 @@ import { catchError, throwError } from 'rxjs';
 import IResponse from '../types/response.inteface';
 import { AddMemberDialogComponent } from './add-member-dialog.component';
 import { AddTransactionDialogComponent } from './add-transaction-dialog.component';
+import { FilterDialogComponent } from './filter-dialog.component';
 import { GroupsService } from './services/groups.service';
 import IFullGroup from './types/full-group.inteface';
 import IMember from './types/member.interface';
 import ITransaction from './types/transaction.interface';
+import IFilterDialog from './types/filter-dialog.inteface';
+import IFilter from './types/filter.interface';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-group',
@@ -76,13 +80,34 @@ import ITransaction from './types/transaction.interface';
       </div>
       <div *ngIf="isTransactionsOpen">
         <div
-          class="gap-4 transaction-grid mt-2"
-          *ngIf="group.transactions.length; else emptyTransactions"
+          class="flex align-center justify-between mt-2 mb-3"
+          *ngIf="group.transactions.length"
         >
-          <app-transaction-card
-            *ngFor="let item of group.transactions"
-            [transaction]="item"
-          />
+          <div class="search-container">
+            <input
+              type="text"
+              name="search"
+              placeholder="Search by title"
+              class="search-input"
+              (keyup)="handleSearchChange($event)"
+            />
+            <mat-icon>search</mat-icon>
+          </div>
+          <mat-icon class="m-3" (click)="openFilterDialog()"
+            >filter_list</mat-icon
+          >
+        </div>
+
+        <div *ngIf="group.transactions.length; else emptyTransactions">
+          <div
+            class="gap-4 transaction-grid mt-2"
+            *ngIf="filteredTransactions().length; else emptyResults"
+          >
+            <app-transaction-card
+              *ngFor="let item of filteredTransactions()"
+              [transaction]="item"
+            />
+          </div>
         </div>
       </div>
       <div class="mt-4 mb-2">
@@ -96,11 +121,11 @@ import ITransaction from './types/transaction.interface';
           </h3>
         </div>
         <div *ngIf="isSplitOpen">
-          <mat-list
-            role="list"
+          <div
+            class="flex column"
             *ngIf="group.transactions.length; else emptyTransactions"
           >
-            <mat-list-item role="listitem" *ngFor="let member of group.members">
+            <label *ngFor="let member of group.members" class="p-1 pb-2">
               {{ member.fullname }} spent
               <strong>{{
                 member | memberSpent : group | currency : 'USD'
@@ -109,13 +134,18 @@ import ITransaction from './types/transaction.interface';
               <strong balanceColor [balance]="member | memberBalance : group">{{
                 member | memberBalance : group | currency : 'USD'
               }}</strong>
-            </mat-list-item>
-          </mat-list>
+            </label>
+          </div>
         </div>
       </div>
       <ng-template #emptyTransactions>
         <div *ngIf="!isLoading">
           <h1 class="text-center">No transactions yet!</h1>
+        </div>
+      </ng-template>
+      <ng-template #emptyResults>
+        <div>
+          <h1 class="text-center">No results!</h1>
         </div>
       </ng-template>
     </div>
@@ -126,6 +156,41 @@ import ITransaction from './types/transaction.interface';
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       }
+
+      .search-container {
+        background: transparent;
+        border-radius: 30px;
+        padding: 4px 8px 4px 8px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        border: 1px solid #000;
+        width: 200px;
+        transition: border-color 500ms, width 250ms;
+      }
+
+      .search-input {
+        background: transparent;
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 16px;
+      }
+
+      .mat-icon {
+        transition: color 500ms;
+      }
+
+      .search-container:hover,
+      .search-container:focus-within {
+        border-color: #673ab7;
+        width: 240px;
+      }
+
+      .search-container:hover > .mat-icon,
+      .search-container:focus-within > .mat-icon {
+        color: #673ab7;
+      }
     `,
   ],
 })
@@ -135,7 +200,16 @@ export class GroupComponent implements OnInit {
   private groups = inject(GroupsService);
   private activeRoute = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
+  private title = inject(Title);
   router = inject(Router);
+  filters = signal<IFilter>({
+    category: '',
+    paidBy: 'all',
+    fromDate: '',
+    toDate: '',
+  });
+  search = signal('');
+  filteredTransactions = signal<ITransaction[]>([]);
   isTransactionsOpen = false;
   isSplitOpen = false;
   groupId = '';
@@ -150,7 +224,11 @@ export class GroupComponent implements OnInit {
     transactions: <ITransaction[]>[],
   };
 
-  getMembers() {
+  constructor() {
+    this.title.setTitle('Group');
+  }
+
+  getData() {
     this.isLoading = true;
     this.groups
       .getGroupById(this.groupId)
@@ -165,6 +243,8 @@ export class GroupComponent implements OnInit {
       .subscribe((res: IResponse<IFullGroup>) => {
         console.log(res);
         this.group = res.data;
+        this.title.setTitle(`Group - ${res.data.title}`);
+        this.filteredTransactions.set(res.data.transactions);
         this.isLoading = false;
       });
   }
@@ -176,7 +256,7 @@ export class GroupComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.getMembers();
+        this.getData();
       }
     });
   }
@@ -188,26 +268,40 @@ export class GroupComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.getMembers();
+        this.getData();
       }
     });
   }
 
-  calcMemberBalance(member: IMember) {
-    let sum = 0;
-    let paid = 0;
-    this.group.transactions.forEach((t) => {
-      sum += t.amount;
-      if (t.paid_by.user_id === member._id) {
-        paid += t.amount;
-      }
+  openFilterDialog() {
+    const data: IFilterDialog = {
+      members: this.group.members,
+      transactions: this.group.transactions,
+      filteredTransactions: this.filteredTransactions,
+      filters: this.filters,
+      search: this.search,
+    };
+    this.dialog.open(FilterDialogComponent, {
+      width: '250px',
+      height: '100%',
+      position: { left: '0', top: '0' },
+      data,
     });
+  }
 
-    return paid - sum / this.group.members.length;
+  handleSearchChange(e: Event) {
+    const target = e.target as HTMLInputElement;
+    this.search.set(target.value);
+    const temp = [...this.group.transactions];
+    this.filteredTransactions.set(
+      temp.filter(({ title }) =>
+        title.toLowerCase().includes(target.value.toLowerCase())
+      )
+    );
   }
 
   ngOnInit() {
     this.groupId = this.activeRoute.snapshot.paramMap.get('group_id') as string;
-    this.getMembers();
+    this.getData();
   }
 }

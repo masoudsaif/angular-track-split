@@ -1,5 +1,6 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { catchError, Subscription, throwError } from 'rxjs';
 
@@ -89,6 +90,7 @@ import ISignUp from './types/sign-up.interface';
 export class SignUpComponent implements OnDestroy {
   private router = inject(Router);
   private authService = inject(AuthService);
+  private title = inject(Title);
   form = inject(FormBuilder).nonNullable.group({
     fullname: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
@@ -108,6 +110,10 @@ export class SignUpComponent implements OnDestroy {
 
   get password() {
     return this.form.controls.password;
+  }
+
+  constructor() {
+    this.title.setTitle('Sign up');
   }
 
   handleSubmit() {
