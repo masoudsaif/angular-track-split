@@ -88,13 +88,14 @@ export class FilterDialogComponent {
   }
 
   handleReset() {
-    this.data.filters.set({
+    const value = {
       category: '',
       paidBy: 'all',
       fromDate: '',
       toDate: '',
-    });
-    this.form.reset();
+    };
+    this.data.filters.set(value);
+    this.form.setValue(value);
     this.handleResetFilteredTransactions();
   }
 
