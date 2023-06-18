@@ -110,6 +110,12 @@ export class FilterDialogComponent {
   handleFilter(e: Partial<IFilter>) {
     this.handleResetFilteredTransactions();
     const { category, paidBy, fromDate, toDate } = e;
+    this.data.filters.set({
+      category: category!,
+      paidBy: paidBy!,
+      fromDate: fromDate!,
+      toDate: toDate!,
+    });
     let temp = [...this.data.filteredTransactions()];
 
     if (paidBy !== 'all') {
