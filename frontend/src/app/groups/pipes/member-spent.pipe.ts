@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import IMember from './types/member.interface';
-import IFullGroup from './types/full-group.inteface';
+import IMember from '../types/member.interface';
+import IFullGroup from '../types/full-group.inteface';
 
 @Pipe({
   name: 'memberSpent',

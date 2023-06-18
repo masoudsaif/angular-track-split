@@ -20,15 +20,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AddGroupDialogComponent } from './add-group-dialog.component';
 import { AddMemberDialogComponent } from './add-member-dialog.component';
 import { AddTransactionDialogComponent } from './add-transaction-dialog.component';
-import { BalanceColorDirective } from './balance-color.directive';
+import { BalanceColorDirective } from './directives/balance-color.directive';
 import { GroupCardComponent } from './group-card.component';
 import { GroupComponent } from './group.component';
 import { GroupRoutingModule } from './groups-routing.module';
 import { GroupsComponent } from './groups.component';
-import { MemberBalancePipe } from './member-balance.pipe';
+import { MemberBalancePipe } from './pipes/member-balance.pipe';
 import { MemberCardComponent } from './member-card.component';
-import { MemberSpentPipe } from './member-spent.pipe';
-import { PlusOnePipe } from './plus-one.pipe';
+import { MemberSpentPipe } from './pipes/member-spent.pipe';
 import { TransactionCardComponent } from './transaction-card.component';
 import { ImageViewerDialogComponent } from './image-viewer-dialog.component';
 
@@ -39,7 +38,6 @@ import { ImageViewerDialogComponent } from './image-viewer-dialog.component';
     GroupComponent,
     AddGroupDialogComponent,
     AddMemberDialogComponent,
-    PlusOnePipe,
     AddTransactionDialogComponent,
     MemberCardComponent,
     TransactionCardComponent,
