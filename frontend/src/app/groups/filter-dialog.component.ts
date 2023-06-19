@@ -48,16 +48,13 @@ import IFilter from './types/filter.interface';
           matIconSuffix
           [for]="fromPicker"
         ></mat-datepicker-toggle>
-        <mat-datepicker #fromPicker></mat-datepicker>
+        <mat-datepicker #fromPicker />
       </mat-form-field>
       <mat-form-field class="mr-1 ml-1">
         <mat-label>To date</mat-label>
         <input matInput [matDatepicker]="toPicker" formControlName="toDate" />
-        <mat-datepicker-toggle
-          matIconSuffix
-          [for]="toPicker"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #toPicker></mat-datepicker>
+        <mat-datepicker-toggle matIconSuffix [for]="toPicker" />
+        <mat-datepicker #toPicker />
       </mat-form-field>
     </form>
   `,

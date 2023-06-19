@@ -80,7 +80,7 @@ import { Title } from '@angular/platform-browser';
       </div>
       <div *ngIf="isTransactionsOpen">
         <div
-          class="flex align-center justify-between mt-2 mb-3"
+          class="flex align-center justify-between mt-2 mb-3 wrap"
           *ngIf="group.transactions.length"
         >
           <div class="search-container">
