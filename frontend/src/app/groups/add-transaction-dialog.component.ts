@@ -124,7 +124,7 @@ export class AddTransactionDialogComponent implements OnDestroy {
   groupId: string = inject(MAT_DIALOG_DATA);
   receipt = '';
   receiptSource: File | null = null;
-  addTransaction$: Subscription | null = null;
+  addTransactionSub: Subscription | null = null;
   isLoading = false;
   error = '';
 
@@ -175,8 +175,8 @@ export class AddTransactionDialogComponent implements OnDestroy {
     formData.append('receipt', this.receiptSource!, this.receipt);
     this.isLoading = true;
     this.error = '';
-    this.addTransaction$?.unsubscribe();
-    this.addTransaction$ = this.groupsService
+    this.addTransactionSub?.unsubscribe();
+    this.addTransactionSub = this.groupsService
       .addTransactions(formData, this.groupId)
       .pipe(
         catchError((e) => {
@@ -193,6 +193,6 @@ export class AddTransactionDialogComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.addTransaction$?.unsubscribe();
+    this.addTransactionSub?.unsubscribe();
   }
 }

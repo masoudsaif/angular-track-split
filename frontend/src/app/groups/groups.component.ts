@@ -44,7 +44,7 @@ export class GroupsComponent implements OnDestroy {
   private dialog = inject(MatDialog);
   groupsService = inject(GroupsService);
   isLoading = false;
-  getGroups$: Subscription | null = null;
+  getGroupsSub: Subscription | null = null;
 
   constructor() {
     this.title.setTitle('Groups');
@@ -63,7 +63,7 @@ export class GroupsComponent implements OnDestroy {
       .subscribe((res) => {
         this.isLoading = false;
         this.groupsService.groups.set(res.data);
-        this.getGroups$ = this.groupsService
+        this.getGroupsSub = this.groupsService
           .getGroups(true)
           .subscribe((res) => {
             if (res.success) {
@@ -78,6 +78,6 @@ export class GroupsComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.getGroups$?.unsubscribe();
+    this.getGroupsSub?.unsubscribe();
   }
 }

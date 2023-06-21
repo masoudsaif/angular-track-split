@@ -67,7 +67,7 @@ export class AddMemberDialogComponent implements OnDestroy {
     email: ['', [Validators.required, Validators.email]],
   });
   groupId: string = inject(MAT_DIALOG_DATA);
-  addMember$: Subscription | null = null;
+  addMemberSub: Subscription | null = null;
   isLoading = false;
   error = '';
 
@@ -79,8 +79,8 @@ export class AddMemberDialogComponent implements OnDestroy {
     this.isLoading = true;
     this.error = '';
 
-    this.addMember$?.unsubscribe();
-    this.addMember$ = this.groupsService
+    this.addMemberSub?.unsubscribe();
+    this.addMemberSub = this.groupsService
       .addGroupMember(this.form.value.email as string, this.groupId)
       .pipe(
         catchError((e) => {
@@ -97,6 +97,6 @@ export class AddMemberDialogComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.addMember$?.unsubscribe();
+    this.addMemberSub?.unsubscribe();
   }
 }

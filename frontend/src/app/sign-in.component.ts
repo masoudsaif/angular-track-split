@@ -90,7 +90,7 @@ export class SignInComponent implements OnDestroy {
   });
   isLoading = false;
   error = '';
-  signIn$: Subscription | null = null;
+  signInSub: Subscription | null = null;
 
   get email() {
     return this.form.controls.email;
@@ -106,10 +106,10 @@ export class SignInComponent implements OnDestroy {
 
   handleSubmit() {
     const { isRemember, ...values } = this.form.value;
-    this.signIn$?.unsubscribe();
+    this.signInSub?.unsubscribe();
     this.error = '';
     this.isLoading = true;
-    this.signIn$ = this.authService
+    this.signInSub = this.authService
       .signIn(values as ISignIn)
       .pipe(
         catchError((e) => {
@@ -133,6 +133,6 @@ export class SignInComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.signIn$?.unsubscribe();
+    this.signInSub?.unsubscribe();
   }
 }

@@ -98,7 +98,7 @@ export class SignUpComponent implements OnDestroy {
   });
   isLoading = false;
   error = '';
-  signUp$: Subscription | null = null;
+  signUpSub: Subscription | null = null;
 
   get fullname() {
     return this.form.controls.fullname;
@@ -117,10 +117,10 @@ export class SignUpComponent implements OnDestroy {
   }
 
   handleSubmit() {
-    this.signUp$?.unsubscribe();
+    this.signUpSub?.unsubscribe();
     this.error = '';
     this.isLoading = true;
-    this.signUp$ = this.authService
+    this.signUpSub = this.authService
       .signUp(this.form.value as ISignUp)
       .pipe(
         catchError((e) => {
@@ -142,6 +142,6 @@ export class SignUpComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.signUp$?.unsubscribe();
+    this.signUpSub?.unsubscribe();
   }
 }

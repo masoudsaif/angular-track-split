@@ -7,12 +7,12 @@ import IFullGroup from '../types/full-group.inteface';
 })
 export class MemberSpentPipe implements PipeTransform {
   transform(member: IMember, group: IFullGroup) {
-    return group.transactions.reduce((s, acc) => {
-      if (acc.paid_by.user_id === member.user_id) {
-        return (s += acc.amount);
+    return group.transactions.reduce((acc, t) => {
+      if (t.paid_by.user_id === member.user_id) {
+        return (acc += t.amount);
       }
 
-      return s;
+      return acc;
     }, 0);
   }
 }

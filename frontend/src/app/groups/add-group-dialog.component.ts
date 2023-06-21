@@ -63,7 +63,7 @@ export class AddGroupDialogComponent implements OnDestroy {
   form = inject(FormBuilder).nonNullable.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
   });
-  addGroup$: Subscription | null = null;
+  addGroupSub: Subscription | null = null;
   isLoading = false;
 
   get title() {
@@ -72,8 +72,8 @@ export class AddGroupDialogComponent implements OnDestroy {
 
   handleSubmit() {
     this.isLoading = true;
-    this.addGroup$?.unsubscribe();
-    this.addGroup$ = this.groupsService
+    this.addGroupSub?.unsubscribe();
+    this.addGroupSub = this.groupsService
       .addGroup(this.title.value)
       .pipe(
         catchError(() => {
@@ -92,6 +92,6 @@ export class AddGroupDialogComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.addGroup$?.unsubscribe();
+    this.addGroupSub?.unsubscribe();
   }
 }
